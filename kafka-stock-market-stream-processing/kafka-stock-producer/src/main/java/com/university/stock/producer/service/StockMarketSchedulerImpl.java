@@ -2,6 +2,7 @@ package com.university.stock.producer.service;
 
 import com.university.stock.model.domain.Stock;
 import com.university.stock.model.util.StockGenerator;
+import com.university.stock.producer.domain.stock.StockMarketRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class StockMarketSchedulerImpl implements StockMarketScheduler {
 
-//  private final StockMarketProducer stockProducer;
+  private final StockMarketRepository stockMarketRepository;
   private final List<Stock> uniqueStockList;
 
   @Override
@@ -24,7 +25,7 @@ public class StockMarketSchedulerImpl implements StockMarketScheduler {
     uniqueStockList.forEach(stock -> {
       StockGenerator.updateRandomExchange(stock);
       logger.debug("Stock: {}", stock);
-//      stockProducer.send(stock);
+      stockMarketRepository.send(stock);
     });
   }
 }

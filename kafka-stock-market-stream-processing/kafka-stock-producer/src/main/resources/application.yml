@@ -22,5 +22,4 @@ stock:
 ############################################################
 logging:
   level:
-    com:
-      university: debug
+    com.university.stock.producer: debug

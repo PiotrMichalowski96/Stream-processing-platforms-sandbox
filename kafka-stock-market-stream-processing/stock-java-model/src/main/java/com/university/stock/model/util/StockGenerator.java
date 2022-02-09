@@ -27,7 +27,7 @@ public class StockGenerator {
 
   public static void updateRandomExchange(Stock stock) {
     BigDecimal currentExchange = stock.getExchange();
-    BigDecimal updatedExchange = currentExchange.multiply(new BigDecimal(RandomUtils.nextDouble(0.01, 1), MATH_CONTEXT));
+    BigDecimal updatedExchange = currentExchange.multiply(new BigDecimal(RandomUtils.nextDouble(0.95, 1.05), MATH_CONTEXT));
     stock.setExchange(updatedExchange);
     stock.setInstant(Instant.now());
   }
