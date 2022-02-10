@@ -1,25 +1,21 @@
 server:
-  port: 8081
+  port: 8082
+application:
+  name: stock-stream-processing-app
 
 ############################################################
 # Kafka properties
 ############################################################
 kafka:
   bootstrapAddress: 127.0.0.1:9092
-  topic: stock_test
-
-############################################################
-# Stock market generated quotes properties
-############################################################
-stock:
-  market:
-    unique:
-      quotes: 30
-    schedule: "500"
+  topic:
+    stock: stock_test
+    intermediary: stock_status_intermediary_test
+    statistic: stock_status_test
 
 ############################################################
 # Logging level
 ############################################################
 logging:
   level:
-    com.university.stock.producer: debug
+    com.university.stock.processing.streams: debug
