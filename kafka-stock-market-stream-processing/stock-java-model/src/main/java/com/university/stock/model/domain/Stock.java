@@ -1,8 +1,16 @@
 package com.university.stock.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +27,15 @@ public class Stock {
   private String ticker;
   private Sector sector;
   private BigDecimal exchange;
-  private Instant instant;
+  @JsonFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  private LocalDateTime dateTime;
 
-  public Stock(String ticker, Sector sector, Double exchange, Instant instant) {
+  public Stock(String ticker, Sector sector, Double exchange, LocalDateTime dateTime) {
     this.ticker = ticker;
     this.sector = sector;
     this.exchange = new BigDecimal(exchange, MATH_CONTEXT);
-    this.instant = instant;
+    this.dateTime = dateTime;
   }
 }

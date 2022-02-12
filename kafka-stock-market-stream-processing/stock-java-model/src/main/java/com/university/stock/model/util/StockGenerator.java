@@ -4,7 +4,7 @@ import com.university.stock.model.domain.Sector;
 import com.university.stock.model.domain.Stock;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,7 +20,7 @@ public class StockGenerator {
   public static List<Stock> generateRandomStockList(int uniqueStocks) {
     return Stream.generate(() -> new Stock(RandomStringUtils.randomAlphabetic(8).toUpperCase(),
             randomSector(), RandomUtils.nextDouble(100, 10000),
-            Instant.now()))
+            LocalDateTime.now()))
         .limit(uniqueStocks)
         .collect(Collectors.toList());
   }
@@ -29,7 +29,7 @@ public class StockGenerator {
     BigDecimal currentExchange = stock.getExchange();
     BigDecimal updatedExchange = currentExchange.multiply(new BigDecimal(RandomUtils.nextDouble(0.95, 1.05), MATH_CONTEXT));
     stock.setExchange(updatedExchange);
-    stock.setInstant(Instant.now());
+    stock.setDateTime(LocalDateTime.now());
   }
 
   private static Sector randomSector() {

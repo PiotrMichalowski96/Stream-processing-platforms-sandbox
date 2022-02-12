@@ -83,7 +83,7 @@ public class StockStreamsConfig {
         .stream(intermediaryTopic, Consumed.with(Serdes.String(), stockSerde))
         .groupByKey(Grouped.with(Serdes.String(), stockSerde))
         .aggregate(
-            this::initializeStockStatus,
+            StockStatus::new,
             (key, stock, stockStatus) -> this.calculateStockStatus(stockStatus, stock),
             Materialized.<String, StockStatus, KeyValueStore<Bytes, byte[]>>as("stock-status-agg")
                 .withKeySerde(Serdes.String())
@@ -94,34 +94,24 @@ public class StockStreamsConfig {
     return stockStream;
   }
 
-  private StockStatus initializeStockStatus() {
-    Stock stock = new Stock();
-    stock.setExchange(BigDecimal.ZERO);
-
-    return StockStatus.builder()
-        .recentQuota(stock)
-        .diffExchange(BigDecimal.ZERO)
-        .minExchange(BigDecimal.ZERO)
-        .maxExchange(BigDecimal.ZERO)
-        .build();
-  }
-
   private StockStatus calculateStockStatus(StockStatus previousStockStatus, Stock stock) {
     BigDecimal updatedExchange = Optional.ofNullable(stock)
         .map(Stock::getExchange)
         .orElse(BigDecimal.ZERO);
 
-    BigDecimal diff = Optional.ofNullable(previousStockStatus.getRecentQuota())
+    Stock previousStock = previousStockStatus.getRecentQuota();
+
+    BigDecimal diff = Optional.ofNullable(previousStock)
         .map(Stock::getExchange)
         .map(previousExchange -> previousExchange.subtract(updatedExchange))
         .orElse(updatedExchange);
 
-    BigDecimal minExchange = Optional.ofNullable(previousStockStatus.getRecentQuota())
+    BigDecimal minExchange = Optional.ofNullable(previousStock)
         .map(Stock::getExchange)
         .filter(previousExchange -> previousExchange.compareTo(updatedExchange) < 0)
         .orElse(updatedExchange);
 
-    BigDecimal maxExchange = Optional.ofNullable(previousStockStatus.getRecentQuota())
+    BigDecimal maxExchange = Optional.ofNullable(previousStock)
         .map(Stock::getExchange)
         .filter(previousExchange -> previousExchange.compareTo(updatedExchange) > 0)
         .orElse(updatedExchange);
