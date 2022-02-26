@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>spark-stock-market-stream-processing</artifactId>
+    <groupId>com.university</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>spark-stock-stream-processing</artifactId>
+
+  <properties>
+    <spark.kafka.version>3.2.1</spark.kafka.version>
+    <kafka.version>3.1.0</kafka.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.university</groupId>
+      <artifactId>spark-stock-java-model</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.apache.spark</groupId>-->
+<!--      <artifactId>spark-core_2.13</artifactId>-->
+<!--      <version>3.2.1</version>-->
+<!--    </dependency>-->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming_2.13</artifactId>
+      <version>${spark.kafka.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming-kafka-0-10_2.13</artifactId>
+      <version>${spark.kafka.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka_2.13</artifactId>
+      <version>${kafka.version}</version>
+    </dependency>
+  </dependencies>
+
+</project>
