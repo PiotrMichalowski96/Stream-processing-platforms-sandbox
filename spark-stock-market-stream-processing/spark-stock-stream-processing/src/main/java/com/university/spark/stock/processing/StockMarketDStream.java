@@ -6,6 +6,7 @@ import com.university.spark.stock.processing.repository.StockStatusRepositoryImp
 import com.university.stock.model.domain.Stock;
 import com.university.stock.model.domain.StockStatus;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,8 +23,8 @@ import scala.Tuple2;
 @Slf4j
 public class StockMarketDStream {
 
-  private static final String INPUT_TOPIC = "stock_test";
-  private static final String OUTPUT_TOPIC = "stock_status_test";
+  private static final String INPUT_TOPIC = SparkKafkaConfig.getInputTopic();
+  private static final String OUTPUT_TOPIC = SparkKafkaConfig.getOutputTopic();
 
   public static void main(String[] args) throws InterruptedException {
 
@@ -53,10 +54,11 @@ public class StockMarketDStream {
   }
 
   private static StockStatus initializeStockStatus(Stock stock) {
+    MathContext mathContext = new MathContext(4);
     return StockStatus.builder()
         .recentQuota(stock)
-        .minExchange(BigDecimal.valueOf(Long.MAX_VALUE))
-        .maxExchange(BigDecimal.valueOf(Long.MIN_VALUE))
+        .minExchange(new BigDecimal(Long.MAX_VALUE, mathContext))
+        .maxExchange(new BigDecimal(Long.MIN_VALUE, mathContext))
         .diffExchange(BigDecimal.ZERO)
         .build();
   }
