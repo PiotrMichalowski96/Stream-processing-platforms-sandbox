@@ -1,11 +1,11 @@
 package com.university.spark.stock.processing.config;
 
-import static java.util.Map.entry;
-
 import com.university.spark.stock.processing.kafka.StockDeserializer;
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
@@ -14,6 +14,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 @Slf4j
+@Getter
 public class SparkKafkaConfigRetriever {
 
   private final Configuration config;
@@ -37,14 +38,14 @@ public class SparkKafkaConfigRetriever {
   }
 
   public Map<String, Object> configureKafkaParams() {
-    return Map.ofEntries(
-        entry("bootstrap.servers", config.getString("kafka.bootstrapAddress")),
-        entry("key.deserializer", StringDeserializer.class),
-        entry("value.deserializer", StockDeserializer.class),
-        entry("group.id", config.getString("kafka.stream.group.id")),
-        entry("auto.offset.reset", config.getString("kafka.stream.auto.offset.reset")),
-        entry("enable.auto.commit", config.getBoolean("kafka.stream.enable.auto.commit"))
-    );
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("bootstrap.servers", config.getString("kafka.bootstrapAddress"));
+    properties.put("key.deserializer", StringDeserializer.class);
+    properties.put("value.deserializer", StockDeserializer.class);
+    properties.put("group.id", config.getString("kafka.stream.group.id"));
+    properties.put("auto.offset.reset", config.getString("kafka.stream.auto.offset.reset"));
+    properties.put("enable.auto.commit", config.getBoolean("kafka.stream.enable.auto.commit"));
+    return properties;
   }
 
   public Properties createKafkaProducerProperties() {

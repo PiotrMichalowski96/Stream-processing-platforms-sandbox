@@ -1,7 +1,7 @@
 package com.university.spark.stock.processing.repository;
 
-import com.university.spark.stock.processing.kafka.StockStatusSerializer;
 import com.university.stock.model.domain.StockStatus;
+import com.university.stock.model.kafka.StockMarketSerializer;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -17,7 +17,7 @@ public class StockStatusRepositoryImpl implements StockStatusRepository {
 
   public StockStatusRepositoryImpl(String topic, Properties producerProperties) {
     Serializer<String> stringSerializer = new StringSerializer();
-    Serializer<StockStatus> stockStatusSerializer = new StockStatusSerializer();
+    Serializer<StockStatus> stockStatusSerializer = new StockMarketSerializer<>();
     this.producer = new KafkaProducer<>(producerProperties, stringSerializer, stockStatusSerializer);
     this.topic = topic;
   }
