@@ -20,7 +20,7 @@ public class SparkStockProcessingApplication {
     Logger.getLogger("org.apache").setLevel(Level.WARN);
     Logger.getLogger("org.apache.spark.storage").setLevel(Level.ERROR);
 
-    SparkConf conf = new SparkConf().setAppName("stockMarketDStreamApp").setMaster("local[*]");
+    SparkConf conf = new SparkConf().setAppName("sparkStockProcessingApplication").setMaster("local[*]");
 
     JavaStreamingContext sc = new JavaStreamingContext(conf, Durations.seconds(1));
 
