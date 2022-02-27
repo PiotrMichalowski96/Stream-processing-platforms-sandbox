@@ -1,6 +1,5 @@
 package com.university.spark.stock.processing.stream;
 
-import com.university.spark.stock.processing.config.SparkKafkaConfig;
 import com.university.spark.stock.processing.repository.StockStatusRepository;
 import com.university.spark.stock.processing.repository.StockStatusRepositoryImpl;
 import com.university.stock.model.domain.Stock;
@@ -8,14 +7,19 @@ import com.university.stock.model.domain.StockStatus;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
+import org.apache.spark.streaming.kafka010.ConsumerStrategies;
+import org.apache.spark.streaming.kafka010.KafkaUtils;
+import org.apache.spark.streaming.kafka010.LocationStrategies;
 import scala.Tuple2;
 
 @Slf4j
@@ -28,26 +32,27 @@ public class StockMarketDStream {
   private final StockStatusRepository stockStatusRepository;
 
   public StockMarketDStream(JavaStreamingContext streamingContext, String inputTopic,
-      String outputTopic) {
+      String outputTopic, Properties kafkaProducerProperties) {
 
     this.streamingContext = streamingContext;
     this.inputTopic = inputTopic;
     this.outputTopic = outputTopic;
-    this.stockStatusRepository = new StockStatusRepositoryImpl(outputTopic,
-        SparkKafkaConfig.createKafkaProducerProperties());
+    this.stockStatusRepository = new StockStatusRepositoryImpl(outputTopic, kafkaProducerProperties);
   }
 
-  public void stockStream() {
-    JavaInputDStream<ConsumerRecord<String, Stock>> stream = SparkKafkaConfig.createDStream(
-        streamingContext, List.of(inputTopic));
+  public void stockStream(Map<String, Object> kafkaParams) {
+
+    JavaInputDStream<ConsumerRecord<String, Stock>> stream = KafkaUtils.createDirectStream(streamingContext,
+        LocationStrategies.PreferConsistent(),
+        ConsumerStrategies.Subscribe(List.of(inputTopic), kafkaParams));
 
     stream.filter(item -> Objects.nonNull(item.value()))
         .mapToPair(item -> new Tuple2<>(item.value().getTicker(), item.value()))
         .mapValues(StockMarketDStream::initializeStockStatus)
         .reduceByKeyAndWindow(StockMarketDStream::calculateStockStatus, Durations.seconds(10))
-        .foreachRDD(rdd -> {
-          rdd.collect().forEach(record -> stockStatusRepository.send(record._1, record._2));
-        });
+        .foreachRDD(rdd -> rdd.collect()
+            .forEach(record -> stockStatusRepository.send(record._1, record._2))
+        );
   }
 
   private static StockStatus initializeStockStatus(Stock stock) {

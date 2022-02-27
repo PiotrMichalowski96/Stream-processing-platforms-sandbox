@@ -2,6 +2,8 @@ package com.university.spark.stock.processing;
 
 import com.university.spark.stock.processing.config.SparkKafkaConfig;
 import com.university.spark.stock.processing.stream.StockMarketDStream;
+import java.util.Map;
+import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -15,6 +17,9 @@ public class SparkStockProcessingApplication {
   private static final String INPUT_TOPIC = SparkKafkaConfig.getInputTopic();
   private static final String OUTPUT_TOPIC = SparkKafkaConfig.getOutputTopic();
 
+  private static final Map<String, Object> KAFKA_PARAMS = SparkKafkaConfig.configureKafkaParams();
+  private static final Properties KAFKA_PRODUCER_PROPERTIES = SparkKafkaConfig.createKafkaProducerProperties();
+
   public static void main(String[] args) throws InterruptedException {
 
     Logger.getLogger("org.apache").setLevel(Level.WARN);
@@ -24,9 +29,9 @@ public class SparkStockProcessingApplication {
 
     JavaStreamingContext sc = new JavaStreamingContext(conf, Durations.seconds(1));
 
-    StockMarketDStream stockMarketDStream = new StockMarketDStream(sc, INPUT_TOPIC, OUTPUT_TOPIC);
+    StockMarketDStream stockMarketDStream = new StockMarketDStream(sc, INPUT_TOPIC, OUTPUT_TOPIC, KAFKA_PRODUCER_PROPERTIES);
 
-    stockMarketDStream.stockStream();
+    stockMarketDStream.stockStream(KAFKA_PARAMS);
 
     sc.start();
     sc.awaitTermination();

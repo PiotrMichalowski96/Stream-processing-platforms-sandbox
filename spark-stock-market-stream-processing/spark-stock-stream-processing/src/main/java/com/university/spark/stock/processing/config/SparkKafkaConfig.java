@@ -3,23 +3,15 @@ package com.university.spark.stock.processing.config;
 import static java.util.Map.entry;
 
 import com.university.spark.stock.processing.kafka.StockDeserializer;
-import com.university.stock.model.domain.Stock;
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.spark.streaming.api.java.JavaInputDStream;
-import org.apache.spark.streaming.api.java.JavaStreamingContext;
-import org.apache.spark.streaming.kafka010.ConsumerStrategies;
-import org.apache.spark.streaming.kafka010.KafkaUtils;
-import org.apache.spark.streaming.kafka010.LocationStrategies;
 
 @UtilityClass
 public class SparkKafkaConfig {
@@ -43,15 +35,7 @@ public class SparkKafkaConfig {
     return config.getString("topic.output");
   }
 
-  public static JavaInputDStream<ConsumerRecord<String, Stock>> createDStream(JavaStreamingContext sc,
-      List<String> topics) {
-
-    return KafkaUtils.createDirectStream(sc,
-        LocationStrategies.PreferConsistent(),
-        ConsumerStrategies.Subscribe(topics, configureKafkaParams()));
-  }
-
-  private static Map<String, Object> configureKafkaParams() {
+  public static Map<String, Object> configureKafkaParams() {
     return Map.ofEntries(
         entry("bootstrap.servers", config.getString("kafka.bootstrapAddress")),
         entry("key.deserializer", StringDeserializer.class),
