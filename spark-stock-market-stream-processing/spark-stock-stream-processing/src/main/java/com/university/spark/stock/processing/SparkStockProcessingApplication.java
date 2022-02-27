@@ -1,6 +1,6 @@
 package com.university.spark.stock.processing;
 
-import com.university.spark.stock.processing.config.SparkKafkaConfig;
+import com.university.spark.stock.processing.config.SparkKafkaConfigRetriever;
 import com.university.spark.stock.processing.stream.StockMarketDStream;
 import java.util.Map;
 import java.util.Properties;
@@ -14,11 +14,13 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 @Slf4j
 public class SparkStockProcessingApplication {
 
-  private static final String INPUT_TOPIC = SparkKafkaConfig.getInputTopic();
-  private static final String OUTPUT_TOPIC = SparkKafkaConfig.getOutputTopic();
+  private static final SparkKafkaConfigRetriever CONFIG_RETRIEVER = new SparkKafkaConfigRetriever("application.properties");
 
-  private static final Map<String, Object> KAFKA_PARAMS = SparkKafkaConfig.configureKafkaParams();
-  private static final Properties KAFKA_PRODUCER_PROPERTIES = SparkKafkaConfig.createKafkaProducerProperties();
+  private static final String INPUT_TOPIC = CONFIG_RETRIEVER.getInputTopic();
+  private static final String OUTPUT_TOPIC = CONFIG_RETRIEVER.getOutputTopic();
+
+  private static final Map<String, Object> KAFKA_PARAMS = CONFIG_RETRIEVER.configureKafkaParams();
+  private static final Properties KAFKA_PRODUCER_PROPERTIES = CONFIG_RETRIEVER.createKafkaProducerProperties();
 
   public static void main(String[] args) throws InterruptedException {
 
