@@ -2,8 +2,8 @@ package com.university.spark.stock.processing.stream;
 
 import com.university.spark.stock.processing.repository.StockStatusRepository;
 import com.university.spark.stock.processing.repository.StockStatusRepositoryImpl;
-import com.university.stock.model.domain.Stock;
-import com.university.stock.model.domain.StockStatus;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.domain.StockStatus;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;

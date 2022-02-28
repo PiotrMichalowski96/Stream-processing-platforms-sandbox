@@ -1,9 +1,9 @@
 package com.university.spark.stock.processing.kafka;
 
-import com.university.stock.model.domain.Stock;
-import com.university.stock.model.domain.StockStatus;
-import com.university.stock.model.kafka.StockMarketDeserializer;
-import com.university.stock.model.kafka.StockMarketSerializer;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.domain.StockStatus;
+import com.university.stock.market.model.kafka.StockMarketDeserializer;
+import com.university.stock.market.model.kafka.StockMarketSerializer;
 import java.util.Properties;
 import lombok.experimental.UtilityClass;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

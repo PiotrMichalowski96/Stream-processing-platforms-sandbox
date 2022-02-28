@@ -1,7 +1,7 @@
 package com.university.spark.stock.processing.kafka;
 
-import com.university.stock.model.domain.Stock;
-import com.university.stock.model.kafka.StockMarketDeserializer;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.kafka.StockMarketDeserializer;
 
 public class StockDeserializer extends StockMarketDeserializer<Stock> {
 

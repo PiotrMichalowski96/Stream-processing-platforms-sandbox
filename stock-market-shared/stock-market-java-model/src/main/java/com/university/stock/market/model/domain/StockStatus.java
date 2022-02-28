@@ -1,4 +1,4 @@
-package com.university.stock.model.domain;
+package com.university.stock.market.model.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

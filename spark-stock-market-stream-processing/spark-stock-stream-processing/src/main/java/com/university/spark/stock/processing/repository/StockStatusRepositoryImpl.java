@@ -1,7 +1,7 @@
 package com.university.spark.stock.processing.repository;
 
-import com.university.stock.model.domain.StockStatus;
-import com.university.stock.model.kafka.StockMarketSerializer;
+import com.university.stock.market.model.domain.StockStatus;
+import com.university.stock.market.model.kafka.StockMarketSerializer;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;

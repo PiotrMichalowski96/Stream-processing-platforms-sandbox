@@ -1,4 +1,4 @@
-package com.university.stock.model.domain;
+package com.university.stock.market.model.domain;
 
 public enum Sector {
   ENERGY_MINERALS,

@@ -1,4 +1,4 @@
-package com.university.stock.model.kafka;
+package com.university.stock.market.model.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

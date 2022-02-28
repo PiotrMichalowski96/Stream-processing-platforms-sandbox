@@ -1,7 +1,7 @@
-package com.university.stock.model.util;
+package com.university.stock.market.model.util;
 
-import com.university.stock.model.domain.Sector;
-import com.university.stock.model.domain.Stock;
+import com.university.stock.market.model.domain.Sector;
+import com.university.stock.market.model.domain.Stock;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.LocalDateTime;

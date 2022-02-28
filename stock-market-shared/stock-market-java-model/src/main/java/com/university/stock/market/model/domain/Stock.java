@@ -1,4 +1,4 @@
-package com.university.stock.model.domain;
+package com.university.stock.market.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
