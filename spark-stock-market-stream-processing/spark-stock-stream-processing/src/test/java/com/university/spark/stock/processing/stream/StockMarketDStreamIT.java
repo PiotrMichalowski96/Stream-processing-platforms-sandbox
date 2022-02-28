@@ -3,8 +3,8 @@ package com.university.spark.stock.processing.stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.university.spark.stock.processing.config.SparkKafkaConfigRetriever;
-import com.university.spark.stock.processing.stream.kafka.KafkaUtil;
-import com.university.spark.stock.processing.stream.util.JsonUtil;
+import com.university.spark.stock.processing.kafka.KafkaUtil;
+import com.university.spark.stock.processing.util.JsonUtil;
 import com.university.stock.model.domain.Stock;
 import com.university.stock.model.domain.StockStatus;
 import java.time.Duration;

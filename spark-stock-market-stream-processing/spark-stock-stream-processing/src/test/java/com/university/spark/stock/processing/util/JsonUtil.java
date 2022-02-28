@@ -1,4 +1,4 @@
-package com.university.spark.stock.processing.stream.util;
+package com.university.spark.stock.processing.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

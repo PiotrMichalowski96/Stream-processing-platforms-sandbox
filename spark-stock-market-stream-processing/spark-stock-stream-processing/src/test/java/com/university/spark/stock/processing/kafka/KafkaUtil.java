@@ -1,4 +1,4 @@
-package com.university.spark.stock.processing.stream.kafka;
+package com.university.spark.stock.processing.kafka;
 
 import com.university.stock.model.domain.Stock;
 import com.university.stock.model.domain.StockStatus;

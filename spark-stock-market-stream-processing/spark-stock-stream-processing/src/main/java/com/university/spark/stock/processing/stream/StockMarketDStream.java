@@ -56,12 +56,12 @@ public class StockMarketDStream {
   }
 
   private static StockStatus initializeStockStatus(Stock stock) {
-    MathContext mathContext = new MathContext(4);
+    BigDecimal exchange = stock.getExchange();
     return StockStatus.builder()
         .recentQuota(stock)
-        .minExchange(new BigDecimal(Long.MAX_VALUE, mathContext))
-        .maxExchange(new BigDecimal(Long.MIN_VALUE, mathContext))
-        .diffExchange(BigDecimal.ZERO)
+        .minExchange(exchange)
+        .maxExchange(exchange)
+        .diffExchange(exchange)
         .build();
   }
 
@@ -72,11 +72,9 @@ public class StockMarketDStream {
 
     Stock previousStock = previousStockStatus.getRecentQuota();
 
-    MathContext mathContext = new MathContext(4);
-
     BigDecimal diff = Optional.ofNullable(previousStock)
         .map(Stock::getExchange)
-        .map(previousExchange -> previousExchange.subtract(updatedExchange, mathContext))
+        .map(previousExchange -> previousExchange.subtract(updatedExchange))
         .orElse(updatedExchange);
 
     BigDecimal minExchange = Optional.ofNullable(previousStock)
