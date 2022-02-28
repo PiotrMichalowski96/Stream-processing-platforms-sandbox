@@ -3,7 +3,6 @@ package com.university.stock.processing.streams;
 import com.university.stock.model.domain.Stock;
 import com.university.stock.model.domain.StockStatus;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -84,7 +83,7 @@ public class StockStreamsConfig {
         .stream(intermediaryTopic, Consumed.with(Serdes.String(), stockSerde))
         .groupByKey(Grouped.with(Serdes.String(), stockSerde))
         .aggregate(
-            this::initializeStockStatus,
+            StockStatus::new,
             (key, stock, stockStatus) -> this.calculateStockStatus(stockStatus, stock),
             Materialized.<String, StockStatus, KeyValueStore<Bytes, byte[]>>as("stock-status-agg")
                 .withKeySerde(Serdes.String())
@@ -93,15 +92,6 @@ public class StockStreamsConfig {
 
     stockStatusTable.toStream().to(outputTopic, Produced.with(Serdes.String(), stockStatusSerde));
     return stockStream;
-  }
-
-  private StockStatus initializeStockStatus() {
-    MathContext mathContext = new MathContext(4);
-    return StockStatus.builder()
-        .minExchange(new BigDecimal(Long.MAX_VALUE, mathContext))
-        .maxExchange(new BigDecimal(Long.MIN_VALUE, mathContext))
-        .diffExchange(BigDecimal.ZERO)
-        .build();
   }
 
   private StockStatus calculateStockStatus(StockStatus previousStockStatus, Stock stock) {
