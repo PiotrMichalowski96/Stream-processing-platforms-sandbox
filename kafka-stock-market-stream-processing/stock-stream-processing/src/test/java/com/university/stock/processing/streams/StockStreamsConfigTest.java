@@ -1,7 +1,7 @@
 package com.university.stock.processing.streams;
 
-import com.university.stock.model.domain.Stock;
-import com.university.stock.model.domain.StockStatus;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.domain.StockStatus;
 import com.university.stock.processing.util.JsonUtil;
 import java.util.List;
 import java.util.Map;

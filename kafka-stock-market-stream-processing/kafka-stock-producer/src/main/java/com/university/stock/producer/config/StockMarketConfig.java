@@ -1,7 +1,7 @@
 package com.university.stock.producer.config;
 
-import com.university.stock.model.domain.Stock;
-import com.university.stock.model.util.StockGenerator;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.util.StockGenerator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

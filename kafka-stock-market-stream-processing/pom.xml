@@ -7,7 +7,6 @@
 	<modules>
 		<module>kafka-stock-producer</module>
 		<module>stock-stream-processing</module>
-		<module>stock-java-model</module>
   </modules>
 
 	<parent>
