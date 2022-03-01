@@ -6,6 +6,7 @@
 
   <modules>
     <module>stock-market-java-model</module>
+    <module>stock-market-common-test</module>
   </modules>
 
   <groupId>com.university</groupId>

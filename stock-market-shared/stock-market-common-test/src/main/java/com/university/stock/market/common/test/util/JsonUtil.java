@@ -1,4 +1,4 @@
-package com.university.spark.stock.processing.util;
+package com.university.stock.market.common.test.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,10 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
-@Slf4j
 @UtilityClass
 public class JsonUtil {
 
@@ -33,7 +31,6 @@ public class JsonUtil {
       return gson.fromJson(jsonText, clazz);
     } catch (IOException | JsonSyntaxException e) {
       e.printStackTrace();
-      logger.warn("Couldn't convert Json File to object");
       return null;
     }
   }

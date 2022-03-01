@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.university.spark.stock.processing.config.SparkKafkaConfigRetriever;
 import com.university.spark.stock.processing.kafka.KafkaUtil;
-import com.university.spark.stock.processing.util.JsonUtil;
+import com.university.stock.market.common.test.util.JsonUtil;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
 import java.time.Duration;
