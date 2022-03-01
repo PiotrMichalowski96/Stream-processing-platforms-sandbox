@@ -1,6 +1,6 @@
 package com.university.stock.producer.config;
 
-import com.university.stock.model.domain.Stock;
+import com.university.stock.market.model.domain.Stock;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;

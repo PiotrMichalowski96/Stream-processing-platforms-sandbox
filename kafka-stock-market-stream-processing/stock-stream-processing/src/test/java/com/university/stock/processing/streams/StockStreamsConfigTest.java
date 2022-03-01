@@ -1,8 +1,8 @@
 package com.university.stock.processing.streams;
 
-import com.university.stock.model.domain.Stock;
-import com.university.stock.model.domain.StockStatus;
-import com.university.stock.processing.util.JsonUtil;
+import com.university.stock.market.common.test.util.JsonUtil;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.domain.StockStatus;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,14 +60,14 @@ class StockStreamsConfigTest {
   @Test
   void testProcessingStreamOfStocks() {
     //given
-    String inputFilePath = "samples/input/stock_1_%d.json";
+    String inputFilePath = "src/test/resources/samples/input/stock_1_%d.json";
 
     List<Stock> inputStockList = IntStream.range(1, 5)
         .mapToObj(i -> String.format(inputFilePath, i))
         .map(filePath -> JsonUtil.extractFromJson(Stock.class, filePath))
         .collect(Collectors.toList());
 
-    String outputFilePath = "samples/output/stockStatus_1_%d.json";
+    String outputFilePath = "src/test/resources/samples/output/stockStatus_1_%d.json";
     Map<String, StockStatus> expectedStockStatus = IntStream.range(1, 4)
         .mapToObj(i -> String.format(outputFilePath, i))
         .map(filePath -> JsonUtil.extractFromJson(StockStatus.class, filePath))

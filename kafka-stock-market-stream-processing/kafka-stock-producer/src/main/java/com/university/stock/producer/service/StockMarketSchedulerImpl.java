@@ -1,7 +1,7 @@
 package com.university.stock.producer.service;
 
-import com.university.stock.model.domain.Stock;
-import com.university.stock.model.util.StockGenerator;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.util.StockGenerator;
 import com.university.stock.producer.domain.stock.StockMarketRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

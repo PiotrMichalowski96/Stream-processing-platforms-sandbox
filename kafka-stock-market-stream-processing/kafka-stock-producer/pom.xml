@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>com.university</groupId>
-      <artifactId>stock-java-model</artifactId>
+      <artifactId>stock-market-java-model</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>

@@ -1,6 +1,6 @@
 package com.university.stock.producer.domain.stock;
 
-import com.university.stock.model.domain.Stock;
+import com.university.stock.market.model.domain.Stock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
