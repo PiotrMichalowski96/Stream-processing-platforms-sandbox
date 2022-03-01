@@ -5,7 +5,6 @@ import com.university.spark.stock.processing.repository.StockStatusRepositoryImp
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
