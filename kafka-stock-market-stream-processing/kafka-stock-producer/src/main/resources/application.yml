@@ -9,6 +9,17 @@ kafka:
   topic: stock_test
 
 ############################################################
+# TwelveData webservice properties (twelvedata.com)
+############################################################
+twelvedata:
+  webservice:
+    enable: true
+    properties:
+      keyPassword: ${api.key} #Here add your api secret key
+      url: wss://ws.twelvedata.com/v1/quotes/price
+      subscribeSymbols: AAPL,INFY,TRP,QQQ,IXIC,EUR/USD,USD/JPY,BTC/USD
+
+############################################################
 # Stock market generated quotes properties
 ############################################################
 stock:
