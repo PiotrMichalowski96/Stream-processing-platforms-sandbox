@@ -1,8 +1,19 @@
 package com.university.stock.market.model.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class QuoteDTO {
   private String event;
   private String symbol;
@@ -10,6 +21,7 @@ public class QuoteDTO {
   private String exchange;
   private String type;
   private Long timestamp;
-  private Long price;
-  private Long day_volume;
+  private Double price;
+  @JsonProperty("day_volume")
+  private Long dayVolume;
 }

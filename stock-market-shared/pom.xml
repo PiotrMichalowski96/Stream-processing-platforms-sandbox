@@ -6,12 +6,12 @@
 
   <modules>
     <module>stock-market-java-model</module>
-    <module>stock-market-common-test</module>
+    <module>stock-market-common</module>
   </modules>
 
   <groupId>com.university</groupId>
   <artifactId>stock-market-shared</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>

@@ -1,5 +1,8 @@
-package com.university.stock.market.common.test.util;
+package com.university.stock.market.common.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -30,6 +33,16 @@ public class JsonUtil {
           .create();
       return gson.fromJson(jsonText, clazz);
     } catch (IOException | JsonSyntaxException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public static <T> T convertToObjectFrom(Class<T> clazz, String json) {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(json, clazz);
+    } catch (JsonProcessingException e) {
       e.printStackTrace();
       return null;
     }
