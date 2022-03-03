@@ -1,5 +1,6 @@
 package com.university.stock.market.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import lombok.ToString;
 public class QuoteDTO {
   private String event;
   private String symbol;
+  @JsonAlias("currency_quote")
   private String currency;
   private String exchange;
   private String type;

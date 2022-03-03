@@ -1,6 +1,7 @@
 package com.university.stock.market.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class JsonUtil {
   public static <T> T convertToObjectFrom(Class<T> clazz, String json) {
     try {
       ObjectMapper mapper = new ObjectMapper();
+      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
       return mapper.readValue(json, clazz);
     } catch (JsonProcessingException e) {
       e.printStackTrace();
