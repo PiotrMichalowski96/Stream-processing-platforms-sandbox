@@ -1,6 +1,12 @@
 package com.university.stock.producer.supplier;
 
+import static com.university.stock.producer.webservice.config.TwelveDataWebservicePredicate.nonSubscribeEventPredicate;
+
+import com.university.stock.market.common.util.JsonUtil;
+import com.university.stock.market.model.domain.Stock;
+import com.university.stock.market.model.dto.QuoteDTO;
 import com.university.stock.producer.domain.stock.StockMarketRepository;
+import com.university.stock.producer.mapper.StockMapper;
 import com.university.stock.producer.util.JsonCreatorUtil;
 import com.university.stock.producer.webservice.TwelveDataClient;
 import java.util.List;
@@ -19,8 +25,9 @@ import reactor.core.publisher.Mono;
 @Service
 public class WebserviceStockProducer implements StockMarketProducer {
 
-  private final StockMarketRepository stockMarketRepository;
   private final TwelveDataClient client;
+  private final StockMapper stockMapper;
+  private final StockMarketRepository stockMarketRepository;
 
   @Override
   public void startSendingStocksProcess() {
@@ -54,13 +61,15 @@ public class WebserviceStockProducer implements StockMarketProducer {
         );
   }
 
-  private Flux<String> receiveAll(WebSocketSession session) {
+  private Flux<Stock> receiveAll(WebSocketSession session) {
     return session .receive()
             .map(WebSocketMessage::getPayloadAsText)
-            .doOnNext(textStock -> {
-              logger.debug("Client({}) -> received: [{}]", session.getId(), textStock);
-              //TODO: convert textStock -> Stock object
-              //stockMarketRepository.send(stock);
+            .mapNotNull(quoteJson -> JsonUtil.convertToObjectFrom(QuoteDTO.class, quoteJson))
+            .filter(nonSubscribeEventPredicate())
+            .map(stockMapper::toStock)
+            .doOnNext(stock -> {
+              logger.debug("Client({}) -> received: [{}]", session.getId(), stock.toString());
+              stockMarketRepository.send(stock);
             });
   }
 }
