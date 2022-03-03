@@ -95,32 +95,32 @@ public class StockStreamsConfig {
   }
 
   private StockStatus calculateStockStatus(StockStatus previousStockStatus, Stock stock) {
-    BigDecimal updatedExchange = Optional.ofNullable(stock)
-        .map(Stock::getExchange)
+    BigDecimal updatedPrice = Optional.ofNullable(stock)
+        .map(Stock::getPrice)
         .orElse(BigDecimal.ZERO);
 
     Stock previousStock = previousStockStatus.getRecentQuota();
 
-    BigDecimal diff = Optional.ofNullable(previousStock)
-        .map(Stock::getExchange)
-        .map(previousExchange -> previousExchange.subtract(updatedExchange))
-        .orElse(updatedExchange);
+    BigDecimal diffPrice = Optional.ofNullable(previousStock)
+        .map(Stock::getPrice)
+        .map(previousPrice -> previousPrice.subtract(updatedPrice))
+        .orElse(updatedPrice);
 
-    BigDecimal minExchange = Optional.ofNullable(previousStock)
-        .map(Stock::getExchange)
-        .filter(previousExchange -> previousExchange.compareTo(updatedExchange) < 0)
-        .orElse(updatedExchange);
+    BigDecimal minPrice = Optional.ofNullable(previousStock)
+        .map(Stock::getPrice)
+        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) < 0)
+        .orElse(updatedPrice);
 
-    BigDecimal maxExchange = Optional.ofNullable(previousStock)
-        .map(Stock::getExchange)
-        .filter(previousExchange -> previousExchange.compareTo(updatedExchange) > 0)
-        .orElse(updatedExchange);
+    BigDecimal maxPrice = Optional.ofNullable(previousStock)
+        .map(Stock::getPrice)
+        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) > 0)
+        .orElse(updatedPrice);
 
     StockStatus stockStatus = StockStatus.builder()
         .recentQuota(stock)
-        .diffExchange(diff)
-        .minExchange(minExchange)
-        .maxExchange(maxExchange)
+        .diffPrice(diffPrice)
+        .minPrice(minPrice)
+        .maxPrice(maxPrice)
         .build();
 
     logger.debug("Updating stock statistic: {}", stockStatus.toString());
