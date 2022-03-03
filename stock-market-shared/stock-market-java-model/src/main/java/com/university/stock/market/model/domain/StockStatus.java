@@ -16,7 +16,7 @@ import lombok.ToString;
 public class StockStatus implements Serializable {
 
   private Stock recentQuota;
-  private BigDecimal maxExchange;
-  private BigDecimal minExchange;
-  private BigDecimal diffExchange;
+  private BigDecimal maxPrice;
+  private BigDecimal minPrice;
+  private BigDecimal diffPrice;
 }

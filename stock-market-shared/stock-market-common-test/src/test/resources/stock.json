@@ -1,6 +1,8 @@
 {
   "ticker": "WPQLENRN",
-  "sector": "HEALTH_SERVICE",
-  "exchange": 7095.2547,
-  "dateTime":"2022-02-11 20:49:48"
+  "type": "Common Stock",
+  "exchange": "NASDAQ",
+  "price": 13532.4590,
+  "currency": "USD",
+  "timestamp":"2022-02-11 20:49:48"
 }

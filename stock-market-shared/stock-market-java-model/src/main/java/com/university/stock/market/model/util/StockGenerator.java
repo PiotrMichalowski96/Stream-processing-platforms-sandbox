@@ -1,6 +1,5 @@
 package com.university.stock.market.model.util;
 
-import com.university.stock.market.model.domain.Sector;
 import com.university.stock.market.model.domain.Stock;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -17,24 +16,32 @@ public class StockGenerator {
 
   private static final MathContext MATH_CONTEXT = new MathContext(4);
 
+  private static final List<String> STOCK_TYPES = List.of("Common Stock", "Index", "Digital Currency",
+      "Physical Currency", "ETF");
+  private static final List<String> CURRENCIES = List.of("USD", "EUR", "PLN", "GBP", "BTC", "CHF");
+
   public static List<Stock> generateRandomStockList(int uniqueStocks) {
-    return Stream.generate(() -> new Stock(RandomStringUtils.randomAlphabetic(8).toUpperCase(),
-            randomSector(), RandomUtils.nextDouble(100, 10000),
-            LocalDateTime.now()))
+    return Stream.generate(() -> Stock.builder()
+            .ticker(RandomStringUtils.randomAlphabetic(4).toUpperCase())
+            .type(randomStringFrom(STOCK_TYPES))
+            .exchange(RandomStringUtils.randomAlphabetic(8).toUpperCase())
+            .price(RandomUtils.nextDouble(100, 10000))
+            .currency(randomStringFrom(CURRENCIES))
+            .timestamp(LocalDateTime.now())
+            .build())
         .limit(uniqueStocks)
         .collect(Collectors.toList());
   }
 
   public static void updateRandomExchange(Stock stock) {
-    BigDecimal currentExchange = stock.getExchange();
-    BigDecimal updatedExchange = currentExchange.multiply(new BigDecimal(RandomUtils.nextDouble(0.95, 1.05), MATH_CONTEXT));
-    stock.setExchange(updatedExchange);
-    stock.setDateTime(LocalDateTime.now());
+    BigDecimal currentPrice = stock.getPrice();
+    BigDecimal updatedPrice = currentPrice.multiply(new BigDecimal(RandomUtils.nextDouble(0.95, 1.05), MATH_CONTEXT));
+    stock.setPrice(updatedPrice);
+    stock.setTimestamp(LocalDateTime.now());
   }
 
-  private static Sector randomSector() {
-    List<Sector> sectorList = List.of(Sector.values());
-    int index = RandomUtils.nextInt(0, sectorList.size());
-    return sectorList.get(index);
+  private static String randomStringFrom(List<String> strings) {
+    int index = RandomUtils.nextInt(0, strings.size());
+    return strings.get(index);
   }
 }

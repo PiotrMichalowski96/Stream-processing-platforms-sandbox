@@ -8,32 +8,35 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Builder
 public class Stock implements Serializable {
 
-  private static final MathContext MATH_CONTEXT = new MathContext(4);
-
   private String ticker;
-  private Sector sector;
-  private BigDecimal exchange;
+  private String type;
+  private String exchange;
+  private BigDecimal price;
+  private String currency;
   @JsonFormat(pattern ="yyyy-MM-dd HH:mm:ss")
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  private LocalDateTime dateTime;
+  private LocalDateTime timestamp;
 
-  public Stock(String ticker, Sector sector, Double exchange, LocalDateTime dateTime) {
-    this.ticker = ticker;
-    this.sector = sector;
-    this.exchange = new BigDecimal(exchange, MATH_CONTEXT);
-    this.dateTime = dateTime;
+  public static class StockBuilder {
+
+    private static final int SCALE = 4;
+
+    private BigDecimal price;
+
+    public StockBuilder price(Double price) {
+      this.price = new BigDecimal(price, MathContext.DECIMAL64);
+      this.price = this.price.setScale(SCALE, RoundingMode.HALF_UP);
+      return this;
+    }
   }
 }
