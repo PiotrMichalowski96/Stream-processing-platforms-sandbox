@@ -1,14 +1,27 @@
 package com.university.stock.producer;
 
+import com.university.stock.producer.supplier.StockMarketProducer;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@Slf4j
+@RequiredArgsConstructor
 @EnableScheduling
-public class KafkaStockProducerApplication {
+@SpringBootApplication
+public class KafkaStockProducerApplication implements CommandLineRunner {
+
+  private final StockMarketProducer stockMarketProducer;
 
   public static void main(String[] args) {
     SpringApplication.run(KafkaStockProducerApplication.class, args);
+  }
+
+  @Override
+  public void run(String... args) {
+    stockMarketProducer.startSendingStocksProcess();
   }
 }

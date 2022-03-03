@@ -1,6 +1,6 @@
 package com.university.stock.processing.streams;
 
-import com.university.stock.market.common.test.util.JsonUtil;
+import com.university.stock.market.common.util.JsonUtil;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
 import java.util.List;

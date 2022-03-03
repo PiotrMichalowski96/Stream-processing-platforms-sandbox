@@ -4,19 +4,23 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class StockStatus implements Serializable {
 
   private Stock recentQuota;
-  private BigDecimal maxExchange;
-  private BigDecimal minExchange;
-  private BigDecimal diffExchange;
+  private BigDecimal maxPrice;
+  private BigDecimal minPrice;
+  private BigDecimal diffPrice;
 }

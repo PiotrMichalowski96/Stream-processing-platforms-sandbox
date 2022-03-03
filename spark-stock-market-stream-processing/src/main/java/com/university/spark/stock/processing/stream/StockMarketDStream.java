@@ -55,42 +55,42 @@ public class StockMarketDStream {
   }
 
   private static StockStatus initializeStockStatus(Stock stock) {
-    BigDecimal exchange = stock.getExchange();
+    BigDecimal price = stock.getPrice();
     return StockStatus.builder()
         .recentQuota(stock)
-        .minExchange(exchange)
-        .maxExchange(exchange)
-        .diffExchange(exchange)
+        .minPrice(price)
+        .maxPrice(price)
+        .diffPrice(price)
         .build();
   }
 
   private static StockStatus calculateStockStatus(StockStatus previousStockStatus, StockStatus currentStockStatus) {
-    BigDecimal updatedExchange = Optional.ofNullable(currentStockStatus.getRecentQuota())
-        .map(Stock::getExchange)
+    BigDecimal updatedPrice = Optional.ofNullable(currentStockStatus.getRecentQuota())
+        .map(Stock::getPrice)
         .orElse(BigDecimal.ZERO);
 
     Stock previousStock = previousStockStatus.getRecentQuota();
 
-    BigDecimal diff = Optional.ofNullable(previousStock)
-        .map(Stock::getExchange)
-        .map(previousExchange -> previousExchange.subtract(updatedExchange))
-        .orElse(updatedExchange);
+    BigDecimal diffPrice = Optional.ofNullable(previousStock)
+        .map(Stock::getPrice)
+        .map(previousPrice -> previousPrice.subtract(updatedPrice))
+        .orElse(updatedPrice);
 
-    BigDecimal minExchange = Optional.ofNullable(previousStock)
-        .map(Stock::getExchange)
-        .filter(previousExchange -> previousExchange.compareTo(updatedExchange) < 0)
-        .orElse(updatedExchange);
+    BigDecimal minPrice = Optional.ofNullable(previousStock)
+        .map(Stock::getPrice)
+        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) < 0)
+        .orElse(updatedPrice);
 
-    BigDecimal maxExchange = Optional.ofNullable(previousStock)
-        .map(Stock::getExchange)
-        .filter(previousExchange -> previousExchange.compareTo(updatedExchange) > 0)
-        .orElse(updatedExchange);
+    BigDecimal maxPrice = Optional.ofNullable(previousStock)
+        .map(Stock::getPrice)
+        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) > 0)
+        .orElse(updatedPrice);
 
     StockStatus stockStatus = StockStatus.builder()
         .recentQuota(currentStockStatus.getRecentQuota())
-        .diffExchange(diff)
-        .minExchange(minExchange)
-        .maxExchange(maxExchange)
+        .diffPrice(diffPrice)
+        .minPrice(minPrice)
+        .maxPrice(maxPrice)
         .build();
 
     logger.debug("Updating stock statistic: {}", stockStatus.toString());
