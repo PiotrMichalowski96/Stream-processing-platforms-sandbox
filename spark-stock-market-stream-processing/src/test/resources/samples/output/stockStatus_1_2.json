@@ -1,11 +1,13 @@
 {
   "recentQuota": {
     "ticker": "LDAOPKII",
-    "sector": "TRANSPORTATION",
-    "exchange": 9688.5372,
-    "dateTime":"2022-02-11 20:49:52"
+    "type": "Common Stock",
+    "exchange": "NASDAQ",
+    "price": 9688.5372,
+    "currency": "USD",
+    "timestamp":"2022-02-11 20:49:52"
   },
-  "maxExchange": 9688.5372,
-  "minExchange": 9688.5372,
-  "diffExchange": 9688.5372
+  "maxPrice": 9688.5372,
+  "minPrice": 9688.5372,
+  "diffPrice": 9688.5372
 }
