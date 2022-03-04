@@ -62,7 +62,7 @@ public class WebserviceStockProducer implements StockMarketProducer {
   }
 
   private Flux<Stock> receiveAll(WebSocketSession session) {
-    return session .receive()
+    return session.receive()
             .map(WebSocketMessage::getPayloadAsText)
             .mapNotNull(quoteJson -> JsonUtil.convertToObjectFrom(QuoteDTO.class, quoteJson))
             .filter(nonSubscribeEventPredicate())
