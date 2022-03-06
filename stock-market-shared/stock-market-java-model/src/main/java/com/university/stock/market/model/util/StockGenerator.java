@@ -2,6 +2,7 @@ package com.university.stock.market.model.util;
 
 import com.university.stock.market.model.domain.Stock;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +28,7 @@ public class StockGenerator {
             .exchange(RandomStringUtils.randomAlphabetic(8).toUpperCase())
             .price(RandomUtils.nextDouble(100, 10000))
             .currency(randomStringFrom(CURRENCIES))
+            .volume(BigInteger.valueOf(RandomUtils.nextLong(100L, 10000L)))
             .timestamp(LocalDateTime.now())
             .build())
         .limit(uniqueStocks)
@@ -37,6 +39,7 @@ public class StockGenerator {
     BigDecimal currentPrice = stock.getPrice();
     BigDecimal updatedPrice = currentPrice.multiply(new BigDecimal(RandomUtils.nextDouble(0.95, 1.05), MATH_CONTEXT));
     stock.setPrice(updatedPrice);
+    stock.setVolume(BigInteger.valueOf(RandomUtils.nextLong(100L, 10000L)));
     stock.setTimestamp(LocalDateTime.now());
   }
 

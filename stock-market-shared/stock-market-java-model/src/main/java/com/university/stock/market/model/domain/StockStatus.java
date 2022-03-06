@@ -23,4 +23,9 @@ public class StockStatus implements Serializable {
   private BigDecimal maxPrice;
   private BigDecimal minPrice;
   private BigDecimal diffPrice;
+  private TradeAction tradeAction;
+
+  public enum TradeAction {
+    BUY, SELL
+  }
 }
