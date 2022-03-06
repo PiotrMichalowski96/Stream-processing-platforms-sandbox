@@ -5,9 +5,11 @@
     "exchange": "NASDAQ",
     "price": 7606.8509448888,
     "currency": "USD",
+    "volume": 1110,
     "timestamp":"2022-02-11 20:49:58"
   },
   "maxPrice": 7606.8509448888,
   "minPrice": 7095.2547,
-  "diffPrice": -511.5962448888
+  "diffPrice": 511.5962448888,
+  "tradeAction": "SELL"
 }

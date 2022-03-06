@@ -3,6 +3,9 @@ package com.university.stock.processing.streams;
 import com.university.stock.market.common.util.JsonUtil;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
+import com.university.stock.market.trading.analysis.service.TradingAnalysisService;
+import com.university.stock.market.trading.analysis.service.TradingAnalysisServiceImpl;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +31,8 @@ class StockStreamsConfigTest {
   private static final String INPUT_TOPIC_NAME = "inputTopic";
   private static final String OUTPUT_TOPIC_NAME = "outputTopic";
 
+  private TradingAnalysisService<StockStatus, Stock> tradingAnalysisService;
+
   private StockStreamsConfig kafkaStreams;
 
   private TopologyTestDriver testDriver;
@@ -36,11 +41,13 @@ class StockStreamsConfigTest {
 
   @BeforeEach
   void setup() {
-    StreamsBuilder builder = new StreamsBuilder();
+    tradingAnalysisService = initializeTradingAnalysisService();
     kafkaStreams = initializeStockStreamsConfig();
 
+    StreamsBuilder builder = new StreamsBuilder();
+
     //Create Actual Stream Processing pipeline
-    kafkaStreams.stocksStream(builder);
+    kafkaStreams.stocksStream(builder, tradingAnalysisService);
 
     testDriver = new TopologyTestDriver(builder.build(), kafkaStreams.kafkaStreamConfig().asProperties());
 
@@ -90,5 +97,11 @@ class StockStreamsConfigTest {
     kafkaStreamsConfig.setAppName(RandomStringUtils.randomAlphabetic(10));
     kafkaStreamsConfig.setBootstrapAddress("1.2.3.4");
     return kafkaStreamsConfig;
+  }
+
+  private TradingAnalysisService<StockStatus, Stock> initializeTradingAnalysisService() {
+    Duration tradeDuration = Duration.ofMillis(100);
+    int maxBarCount = 12;
+    return new TradingAnalysisServiceImpl(tradeDuration, maxBarCount);
   }
 }
