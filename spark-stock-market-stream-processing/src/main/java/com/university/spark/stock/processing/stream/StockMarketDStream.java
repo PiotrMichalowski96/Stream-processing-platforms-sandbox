@@ -4,11 +4,14 @@ import com.university.spark.stock.processing.repository.StockStatusRepository;
 import com.university.spark.stock.processing.repository.StockStatusRepositoryImpl;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
+import com.university.stock.market.model.domain.StockStatus.TradeAction;
+import com.university.stock.market.trading.analysis.service.TradingAnalysisService;
+import com.university.stock.market.trading.analysis.service.TradingAnalysisServiceImpl;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,9 @@ import scala.Tuple2;
 @Slf4j
 @Getter
 public class StockMarketDStream {
+
+  //TODO: check if can be refactored to not be static
+  private static final TradingAnalysisService<StockStatus, Stock> TRADING_ANALYSIS_SERVICE = new TradingAnalysisServiceImpl(Duration.ofMillis(100), 400);
 
   private final JavaStreamingContext streamingContext;
   private final String inputTopic;
@@ -47,54 +53,25 @@ public class StockMarketDStream {
 
     stream.filter(item -> Objects.nonNull(item.value()))
         .mapToPair(item -> new Tuple2<>(item.value().getTicker(), item.value()))
-        .mapValues(StockMarketDStream::initializeStockStatus)
-        .reduceByKeyAndWindow(StockMarketDStream::calculateStockStatus, Durations.seconds(10))
+        .mapValues(StockMarketDStream::mapToStockStatus)
+        .reduceByKeyAndWindow((oldStatus, newStatus) -> {
+              Stock newTrade = newStatus.getRecentQuota();
+              return TRADING_ANALYSIS_SERVICE.updateTradeAnalysis(oldStatus, newTrade);
+            },
+            Durations.seconds(10))
         .foreachRDD(rdd -> rdd.collect()
             .forEach(record -> stockStatusRepository.send(record._1, record._2))
         );
   }
 
-  private static StockStatus initializeStockStatus(Stock stock) {
+  private static StockStatus mapToStockStatus(Stock stock) {
     BigDecimal price = stock.getPrice();
     return StockStatus.builder()
         .recentQuota(stock)
         .minPrice(price)
         .maxPrice(price)
-        .diffPrice(price)
+        .diffPrice(BigDecimal.ZERO)
+        .tradeAction(TradeAction.SELL)
         .build();
-  }
-
-  private static StockStatus calculateStockStatus(StockStatus previousStockStatus, StockStatus currentStockStatus) {
-    BigDecimal updatedPrice = Optional.ofNullable(currentStockStatus.getRecentQuota())
-        .map(Stock::getPrice)
-        .orElse(BigDecimal.ZERO);
-
-    Stock previousStock = previousStockStatus.getRecentQuota();
-
-    BigDecimal diffPrice = Optional.ofNullable(previousStock)
-        .map(Stock::getPrice)
-        .map(previousPrice -> previousPrice.subtract(updatedPrice))
-        .orElse(updatedPrice);
-
-    BigDecimal minPrice = Optional.ofNullable(previousStock)
-        .map(Stock::getPrice)
-        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) < 0)
-        .orElse(updatedPrice);
-
-    BigDecimal maxPrice = Optional.ofNullable(previousStock)
-        .map(Stock::getPrice)
-        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) > 0)
-        .orElse(updatedPrice);
-
-    StockStatus stockStatus = StockStatus.builder()
-        .recentQuota(currentStockStatus.getRecentQuota())
-        .diffPrice(diffPrice)
-        .minPrice(minPrice)
-        .maxPrice(maxPrice)
-        .build();
-
-    logger.debug("Updating stock statistic: {}", stockStatus.toString());
-
-    return stockStatus;
   }
 }
