@@ -2,8 +2,8 @@
   "ticker": "AAPL",
   "type": "Common Stock",
   "exchange": "NASDAQ",
-  "price": 165.7820,
+  "price": 166.3200,
   "currency": "USD",
-  "volume": 1000,
-  "timestamp":"2022-02-11 20:49:48"
+  "volume": 978,
+  "timestamp":"2022-02-11 20:54:48"
 }
