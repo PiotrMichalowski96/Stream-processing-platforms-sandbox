@@ -68,7 +68,19 @@ public class TradingAnalysisModuleTa4jImpl implements TradingAnalysisModule<Stoc
     BigDecimal volume = Optional.ofNullable(trade.getVolume())
         .map(BigDecimal::new)
         .orElse(BigDecimal.ZERO);
+    ZonedDateTime barTimestamp = createBarTimestamp(trade);
+    return new BaseBar(tradeBarDuration, barTimestamp, price, price, price, price, volume);
+  }
+
+  private ZonedDateTime createBarTimestamp(Stock trade) {
     ZonedDateTime timestamp = trade.getTimestamp().atZone(ZoneId.systemDefault());
-    return new BaseBar(tradeBarDuration, timestamp, price, price, price, price, volume);
+    if (series.isEmpty()) {
+      return timestamp;
+    }
+    return Optional.ofNullable(series.getLastBar())
+        .map(Bar::getEndTime)
+        .filter(endTime -> endTime.isAfter(timestamp) || endTime.isEqual(timestamp))
+        .map(endTime -> endTime.plusSeconds(1))
+        .orElse(timestamp);
   }
 }

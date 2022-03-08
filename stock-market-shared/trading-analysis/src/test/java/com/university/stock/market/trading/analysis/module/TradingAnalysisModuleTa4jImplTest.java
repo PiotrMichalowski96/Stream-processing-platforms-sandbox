@@ -57,7 +57,7 @@ class TradingAnalysisModuleTa4jImplTest {
 
     StockStatus stockStatus = tradingModule.initializeTradeAnalysis(firstTrade);
 
-    Stock newTrade = createTradeWithPrice(125.3, 200);
+    Stock newTrade = createTradeWithPrice(125.3, 100);
 
     StockStatus expectedStockStatus = StockStatus.builder()
         .recentQuota(newTrade)
