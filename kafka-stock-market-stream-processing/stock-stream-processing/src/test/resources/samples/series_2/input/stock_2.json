@@ -1,0 +1,9 @@
+{
+  "ticker": "EUR/USD",
+  "type": "Physical Currency",
+  "exchange": "WWA",
+  "price": 1.1128,
+  "currency": "US Dollar",
+  "volume": 935,
+  "timestamp":"2022-02-11 20:50:48"
+}

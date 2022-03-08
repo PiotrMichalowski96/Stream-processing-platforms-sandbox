@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Bar;
@@ -64,7 +65,9 @@ public class TradingAnalysisModuleTa4jImpl implements TradingAnalysisModule<Stoc
 
   private Bar createBarFrom(Stock trade) {
     BigDecimal price = trade.getPrice();
-    BigDecimal volume = new BigDecimal(trade.getVolume());
+    BigDecimal volume = Optional.ofNullable(trade.getVolume())
+        .map(BigDecimal::new)
+        .orElse(BigDecimal.ZERO);
     ZonedDateTime timestamp = trade.getTimestamp().atZone(ZoneId.systemDefault());
     return new BaseBar(tradeBarDuration, timestamp, price, price, price, price, volume);
   }

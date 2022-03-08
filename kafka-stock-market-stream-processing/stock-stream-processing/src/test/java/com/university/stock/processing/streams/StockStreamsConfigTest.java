@@ -21,7 +21,8 @@ import org.apache.kafka.streams.TopologyTestDriver;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
@@ -64,19 +65,20 @@ class StockStreamsConfigTest {
     }
   }
 
-  @Test
-  void testProcessingStreamOfStocks() {
+  @ParameterizedTest
+  @CsvSource({"1, 16, 3", "2, 11, 4"})
+  void testProcessingStreamOfStocks(int seriesNo, int inputMaxRange, int outputMaxRange) {
     //given
-    String inputFilePath = "src/test/resources/samples/input/stock_1_%d.json";
+    String inputFilePath = "src/test/resources/samples/series_%d/input/stock_%d.json";
 
-    List<Stock> inputStockList = IntStream.range(1, 5)
-        .mapToObj(i -> String.format(inputFilePath, i))
+    List<Stock> inputStockList = IntStream.range(1, inputMaxRange)
+        .mapToObj(i -> String.format(inputFilePath, seriesNo, i))
         .map(filePath -> JsonUtil.extractFromJson(Stock.class, filePath))
         .collect(Collectors.toList());
 
-    String outputFilePath = "src/test/resources/samples/output/stockStatus_1_%d.json";
-    Map<String, StockStatus> expectedStockStatus = IntStream.range(1, 4)
-        .mapToObj(i -> String.format(outputFilePath, i))
+    String outputFilePath = "src/test/resources/samples/series_%d/output/stockStatus_%d.json";
+    Map<String, StockStatus> expectedStockStatus = IntStream.range(1, outputMaxRange)
+        .mapToObj(i -> String.format(outputFilePath, seriesNo, i))
         .map(filePath -> JsonUtil.extractFromJson(StockStatus.class, filePath))
         .collect(Collectors.toMap(stockStatus -> stockStatus.getRecentQuota().getTicker(), stockStatus -> stockStatus));
 
