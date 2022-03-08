@@ -4,5 +4,6 @@
   "exchange": "NASDAQ",
   "price": 13532.4590,
   "currency": "USD",
+  "volume": 100,
   "timestamp":"2022-02-11 20:49:48"
 }

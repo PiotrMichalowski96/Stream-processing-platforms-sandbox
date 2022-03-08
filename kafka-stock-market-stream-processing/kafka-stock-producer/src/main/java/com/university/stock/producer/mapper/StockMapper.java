@@ -10,5 +10,6 @@ public interface StockMapper extends MapperMethods {
 
   @Mapping(target = "ticker", source = "symbol")
   @Mapping(target = "timestamp", source = "timestamp", qualifiedBy = TimestampMapper.class)
+  @Mapping(target = "volume", source = "dayVolume")
   Stock toStock(QuoteDTO quoteDTO);
 }

@@ -1,0 +1,15 @@
+{
+  "recentQuota": {
+    "ticker": "EUR/USD",
+    "type": "Physical Currency",
+    "exchange": "WWA",
+    "price": 1.1092,
+    "currency": "US Dollar",
+    "volume": 900,
+    "timestamp":"2022-02-11 20:57:48"
+  },
+  "maxPrice": 1.1099,
+  "minPrice": 1.1092,
+  "diffPrice": -0.0007,
+  "tradeAction": "BUY"
+}

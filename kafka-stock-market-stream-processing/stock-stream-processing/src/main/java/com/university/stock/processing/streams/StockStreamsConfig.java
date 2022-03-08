@@ -2,11 +2,11 @@ package com.university.stock.processing.streams;
 
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
-import java.math.BigDecimal;
+import com.university.stock.market.trading.analysis.config.TradingAnalysisConfig;
+import com.university.stock.market.trading.analysis.service.TradingAnalysisService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
@@ -33,6 +34,7 @@ import org.springframework.kafka.support.serializer.JsonSerde;
 
 @Slf4j
 @Configuration
+@Import(value = TradingAnalysisConfig.class)
 @EnableKafka
 @EnableKafkaStreams
 @Getter
@@ -67,7 +69,8 @@ public class StockStreamsConfig {
   }
 
   @Bean
-  public KStream<String, Stock> stocksStream(StreamsBuilder streamsBuilder) {
+  public KStream<String, Stock> stocksStream(StreamsBuilder streamsBuilder,
+      TradingAnalysisService<StockStatus, Stock> tradingAnalysisService) {
 
     final Serde<Stock> stockSerde = new JsonSerde<>(Stock.class);
     final Serde<StockStatus> stockStatusSerde = new JsonSerde<>(StockStatus.class);
@@ -84,7 +87,7 @@ public class StockStreamsConfig {
         .groupByKey(Grouped.with(Serdes.String(), stockSerde))
         .aggregate(
             StockStatus::new,
-            (key, stock, stockStatus) -> this.calculateStockStatus(stockStatus, stock),
+            (key, stock, stockStatus) -> tradingAnalysisService.updateTradeAnalysis(stockStatus, stock),
             Materialized.<String, StockStatus, KeyValueStore<Bytes, byte[]>>as("stock-status-agg")
                 .withKeySerde(Serdes.String())
                 .withValueSerde(stockStatusSerde)
@@ -92,39 +95,5 @@ public class StockStreamsConfig {
 
     stockStatusTable.toStream().to(outputTopic, Produced.with(Serdes.String(), stockStatusSerde));
     return stockStream;
-  }
-
-  private StockStatus calculateStockStatus(StockStatus previousStockStatus, Stock stock) {
-    BigDecimal updatedPrice = Optional.ofNullable(stock)
-        .map(Stock::getPrice)
-        .orElse(BigDecimal.ZERO);
-
-    Stock previousStock = previousStockStatus.getRecentQuota();
-
-    BigDecimal diffPrice = Optional.ofNullable(previousStock)
-        .map(Stock::getPrice)
-        .map(previousPrice -> previousPrice.subtract(updatedPrice))
-        .orElse(updatedPrice);
-
-    BigDecimal minPrice = Optional.ofNullable(previousStock)
-        .map(Stock::getPrice)
-        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) < 0)
-        .orElse(updatedPrice);
-
-    BigDecimal maxPrice = Optional.ofNullable(previousStock)
-        .map(Stock::getPrice)
-        .filter(previousPrice -> previousPrice.compareTo(updatedPrice) > 0)
-        .orElse(updatedPrice);
-
-    StockStatus stockStatus = StockStatus.builder()
-        .recentQuota(stock)
-        .diffPrice(diffPrice)
-        .minPrice(minPrice)
-        .maxPrice(maxPrice)
-        .build();
-
-    logger.debug("Updating stock statistic: {}", stockStatus.toString());
-
-    return stockStatus;
   }
 }

@@ -7,7 +7,7 @@ import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.dto.QuoteDTO;
 import com.university.stock.producer.domain.stock.StockMarketRepository;
 import com.university.stock.producer.mapper.StockMapper;
-import com.university.stock.producer.util.JsonCreatorUtil;
+import com.university.stock.producer.util.WebserviceJsonCreatorUtil;
 import com.university.stock.producer.webservice.TwelveDataClient;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class WebserviceStockProducer implements StockMarketProducer {
 
   private Mono<Void> sendMessage(WebSocketSession session) {
     List<String> symbols = client.getWebserviceConfig().getSubscribeSymbols();
-    String message = JsonCreatorUtil.createSubscriptionJson(symbols);
+    String message = WebserviceJsonCreatorUtil.createSubscriptionJson(symbols);
     return Mono.fromRunnable(() -> logger.debug("Client -> connected id=[{}]", session.getId()))
         .then(session.send(
             Mono.fromCallable(() -> session.textMessage(message)))

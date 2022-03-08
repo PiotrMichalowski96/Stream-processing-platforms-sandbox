@@ -35,6 +35,11 @@
       <artifactId>stock-market-common</artifactId>
       <version>${stock.market.shared.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.university</groupId>
+      <artifactId>trading-analysis</artifactId>
+      <version>${stock.market.shared.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.projectlombok</groupId>

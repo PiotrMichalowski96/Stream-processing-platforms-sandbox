@@ -14,8 +14,16 @@ kafka:
     statistic: stock_status_test
 
 ############################################################
+# Trading analysis module properties
+############################################################
+trading:
+  maximumBars: 400
+  tradeDurationInMillis: 100
+
+############################################################
 # Logging level
 ############################################################
 logging:
   level:
     com.university.stock.processing.streams: debug
+    com.university.stock.market.trading.analysis.module: debug

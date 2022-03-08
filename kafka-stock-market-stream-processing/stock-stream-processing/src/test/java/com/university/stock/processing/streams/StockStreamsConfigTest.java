@@ -3,6 +3,9 @@ package com.university.stock.processing.streams;
 import com.university.stock.market.common.util.JsonUtil;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
+import com.university.stock.market.trading.analysis.service.TradingAnalysisService;
+import com.university.stock.market.trading.analysis.service.TradingAnalysisServiceImpl;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,7 +21,8 @@ import org.apache.kafka.streams.TopologyTestDriver;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
@@ -28,6 +32,8 @@ class StockStreamsConfigTest {
   private static final String INPUT_TOPIC_NAME = "inputTopic";
   private static final String OUTPUT_TOPIC_NAME = "outputTopic";
 
+  private TradingAnalysisService<StockStatus, Stock> tradingAnalysisService;
+
   private StockStreamsConfig kafkaStreams;
 
   private TopologyTestDriver testDriver;
@@ -36,11 +42,13 @@ class StockStreamsConfigTest {
 
   @BeforeEach
   void setup() {
-    StreamsBuilder builder = new StreamsBuilder();
+    tradingAnalysisService = initializeTradingAnalysisService();
     kafkaStreams = initializeStockStreamsConfig();
 
+    StreamsBuilder builder = new StreamsBuilder();
+
     //Create Actual Stream Processing pipeline
-    kafkaStreams.stocksStream(builder);
+    kafkaStreams.stocksStream(builder, tradingAnalysisService);
 
     testDriver = new TopologyTestDriver(builder.build(), kafkaStreams.kafkaStreamConfig().asProperties());
 
@@ -57,19 +65,20 @@ class StockStreamsConfigTest {
     }
   }
 
-  @Test
-  void testProcessingStreamOfStocks() {
+  @ParameterizedTest
+  @CsvSource({"1, 16, 3", "2, 11, 4"})
+  void testProcessingStreamOfStocks(int seriesNo, int inputMaxRange, int outputMaxRange) {
     //given
-    String inputFilePath = "src/test/resources/samples/input/stock_1_%d.json";
+    String inputFilePath = "src/test/resources/samples/series_%d/input/stock_%d.json";
 
-    List<Stock> inputStockList = IntStream.range(1, 5)
-        .mapToObj(i -> String.format(inputFilePath, i))
+    List<Stock> inputStockList = IntStream.range(1, inputMaxRange)
+        .mapToObj(i -> String.format(inputFilePath, seriesNo, i))
         .map(filePath -> JsonUtil.extractFromJson(Stock.class, filePath))
         .collect(Collectors.toList());
 
-    String outputFilePath = "src/test/resources/samples/output/stockStatus_1_%d.json";
-    Map<String, StockStatus> expectedStockStatus = IntStream.range(1, 4)
-        .mapToObj(i -> String.format(outputFilePath, i))
+    String outputFilePath = "src/test/resources/samples/series_%d/output/stockStatus_%d.json";
+    Map<String, StockStatus> expectedStockStatus = IntStream.range(1, outputMaxRange)
+        .mapToObj(i -> String.format(outputFilePath, seriesNo, i))
         .map(filePath -> JsonUtil.extractFromJson(StockStatus.class, filePath))
         .collect(Collectors.toMap(stockStatus -> stockStatus.getRecentQuota().getTicker(), stockStatus -> stockStatus));
 
@@ -90,5 +99,11 @@ class StockStreamsConfigTest {
     kafkaStreamsConfig.setAppName(RandomStringUtils.randomAlphabetic(10));
     kafkaStreamsConfig.setBootstrapAddress("1.2.3.4");
     return kafkaStreamsConfig;
+  }
+
+  private TradingAnalysisService<StockStatus, Stock> initializeTradingAnalysisService() {
+    Duration tradeDuration = Duration.ofMillis(100);
+    int maxBarCount = 12;
+    return new TradingAnalysisServiceImpl(tradeDuration, maxBarCount);
   }
 }

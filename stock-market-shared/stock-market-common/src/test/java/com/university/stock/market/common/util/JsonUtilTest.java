@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.dto.QuoteDTO;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ class JsonUtilTest {
         .exchange("NASDAQ")
         .price(13532.4590)
         .currency("USD")
+        .volume(BigInteger.valueOf(100))
         .timestamp(LocalDateTime.of(2022, 2, 11, 20, 49, 48))
         .build();
 

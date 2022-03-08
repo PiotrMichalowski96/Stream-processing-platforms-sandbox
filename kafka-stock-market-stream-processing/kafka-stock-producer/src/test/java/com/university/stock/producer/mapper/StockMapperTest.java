@@ -1,10 +1,10 @@
 package com.university.stock.producer.mapper;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.dto.QuoteDTO;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +32,7 @@ class StockMapperTest {
         .exchange("NASDAQ")
         .price(13532.4590)
         .currency("USD")
+        .volume(BigInteger.valueOf(5356822000L))
         .timestamp(LocalDateTime.of(2022, 3, 1, 22, 22, 29))
         .build();
 

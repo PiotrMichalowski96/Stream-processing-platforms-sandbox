@@ -1,0 +1,13 @@
+############################################################
+# Trading analysis module properties
+############################################################
+trading:
+  maximumBars: 400
+  tradeDurationInMillis: 100
+
+############################################################
+# Logging level
+############################################################
+logging:
+  level:
+    com.university.stock.market.trading.analysis: debug
