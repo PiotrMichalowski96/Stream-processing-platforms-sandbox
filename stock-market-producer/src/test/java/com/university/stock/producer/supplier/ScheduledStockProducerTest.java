@@ -5,7 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.university.stock.market.model.domain.Stock;
-import com.university.stock.producer.domain.stock.StockMarketRepositoryImpl;
+import com.university.stock.producer.repository.StockMarketRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ScheduledStockProducerTest {
 
   @Mock
-  private StockMarketRepositoryImpl stockMarketRepository;
+  private StockMarketRepository stockMarketRepository;
 
   @Captor
   private ArgumentCaptor<Stock> stockCaptor;

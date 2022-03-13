@@ -1,4 +1,4 @@
-package com.university.stock.producer.domain.stock;
+package com.university.stock.producer.repository;
 
 import com.university.stock.market.model.domain.Stock;
 

@@ -5,7 +5,7 @@ import static com.university.stock.producer.webservice.config.TwelveDataWebservi
 import com.university.stock.market.common.util.JsonUtil;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.dto.QuoteDTO;
-import com.university.stock.producer.domain.stock.StockMarketRepository;
+import com.university.stock.producer.repository.StockMarketRepository;
 import com.university.stock.producer.mapper.StockMapper;
 import com.university.stock.producer.util.WebserviceJsonCreatorUtil;
 import com.university.stock.producer.webservice.TwelveDataClient;

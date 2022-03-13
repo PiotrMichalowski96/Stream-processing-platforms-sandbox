@@ -2,7 +2,7 @@ package com.university.stock.producer.supplier;
 
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.util.StockGenerator;
-import com.university.stock.producer.domain.stock.StockMarketRepository;
+import com.university.stock.producer.repository.StockMarketRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

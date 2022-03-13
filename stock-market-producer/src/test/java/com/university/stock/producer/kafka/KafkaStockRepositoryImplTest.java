@@ -1,4 +1,4 @@
-package com.university.stock.producer.domain.stock;
+package com.university.stock.producer.kafka;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @ExtendWith(MockitoExtension.class)
-class StockMarketRepositoryImplTest {
+class KafkaStockRepositoryImplTest {
 
   @Mock
   private KafkaTemplate<String, Stock> kafkaTemplate;
@@ -29,7 +29,7 @@ class StockMarketRepositoryImplTest {
   private ArgumentCaptor<Stock> stockCaptor;
 
   @InjectMocks
-  private StockMarketRepositoryImpl stockMarketRepository;
+  private KafkaStockRepositoryImpl stockMarketRepository;
 
   @Test
   void shouldSendStockToKafka() {
