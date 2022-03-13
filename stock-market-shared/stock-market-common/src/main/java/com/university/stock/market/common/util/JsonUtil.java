@@ -38,4 +38,14 @@ public class JsonUtil {
       return null;
     }
   }
+
+  public static <T> String convertToJson(T object) {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      return mapper.writeValueAsString(object);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }
