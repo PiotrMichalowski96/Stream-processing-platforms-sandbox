@@ -12,12 +12,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @RequiredArgsConstructor
 @EnableScheduling
 @SpringBootApplication
-public class KafkaStockProducerApplication implements CommandLineRunner {
+public class StockProducerApplication implements CommandLineRunner {
 
   private final StockMarketProducer stockMarketProducer;
 
   public static void main(String[] args) {
-    SpringApplication.run(KafkaStockProducerApplication.class, args);
+    SpringApplication.run(StockProducerApplication.class, args);
   }
 
   @Override
