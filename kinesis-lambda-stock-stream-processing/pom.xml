@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.6.4</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <groupId>com.university</groupId>
+  <artifactId>kinesis-lambda-stock-stream-processing</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>kinesis-lambda-stock-stream-processing</name>
+  <description>Project for master thesis regarding stream processing with AWS Kinesis and AWS Lambda</description>
+
+  <properties>
+    <java.version>11</java.version>
+    <spring-cloud-function.version>3.2.2</spring-cloud-function.version>
+    <project.lombok.version>1.18.22</project.lombok.version>
+    <aws-lambda-events.version>3.11.0</aws-lambda-events.version>
+    <aws-lambda-java-core.version>1.2.1</aws-lambda-java-core.version>
+    <aws-kinesis-client.version>1.14.8</aws-kinesis-client.version>
+    <spring-boot-thin.version>1.0.28.RELEASE</spring-boot-thin.version>
+    <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
+    <stock.market.shared.version>0.0.2-SNAPSHOT</stock.market.shared.version>
+  </properties>
+
+  <dependencies>
+    <!-- Stock Market Sandbox -->
+    <dependency>
+      <groupId>com.university</groupId>
+      <artifactId>stock-market-java-model</artifactId>
+      <version>${stock.market.shared.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.university</groupId>
+      <artifactId>stock-market-common</artifactId>
+      <version>${stock.market.shared.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.university</groupId>
+      <artifactId>trading-analysis</artifactId>
+      <version>${stock.market.shared.version}</version>
+    </dependency>
+
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-function-adapter-aws</artifactId>
+      <version>${spring-cloud-function.version}</version>
+    </dependency>
+
+    <!-- We don't need spring-cloud-starter-function-web when deploying to AWS -->
+    <!-- It is used only for local testing -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-function-web</artifactId>
+      <version>${spring-cloud-function.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${project.lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- AWS Kinesis -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-events</artifactId>
+      <version>${aws-lambda-events.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-core</artifactId>
+      <version>${aws-lambda-java-core.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>amazon-kinesis-client</artifactId>
+      <version>${aws-kinesis-client.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework.boot.experimental</groupId>
+            <artifactId>spring-boot-thin-layout</artifactId>
+            <version>${spring-boot-thin.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>${maven-shade-plugin.version}</version>
+        <configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <shadedArtifactAttached>true</shadedArtifactAttached>
+          <shadedClassifierName>aws</shadedClassifierName>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
