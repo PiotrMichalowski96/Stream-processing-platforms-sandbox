@@ -36,6 +36,28 @@ class JsonUtilTest {
     assertThat(actualStock).usingRecursiveComparison().isEqualTo(expectedStock);
   }
 
+  @Test
+  void shouldConvertObjectToJsonString() {
+    //given
+    Stock stock = Stock.builder()
+        .ticker("ABC")
+        .type("Type")
+        .exchange("The Exchange")
+        .price(100.0)
+        .currency("USD")
+        .volume(BigInteger.valueOf(123L))
+        .timestamp(LocalDateTime.of(2022, 3, 13, 20, 20, 20))
+        .build();
+
+    String expectedJson = "{\"ticker\":\"ABC\",\"type\":\"Type\",\"exchange\":\"The Exchange\",\"price\":100.0000,\"currency\":\"USD\",\"volume\":123,\"timestamp\":\"2022-03-13 20:20:20\"}";
+
+    //when
+    String actualJson = JsonUtil.convertToJson(stock);
+
+    //then
+    assertThat(actualJson).isEqualTo(expectedJson);
+  }
+
   @ParameterizedTest
   @MethodSource("provideJson")
   void shouldConvertJsonToQuoteObject(String json, QuoteDTO expectedQuote) {
