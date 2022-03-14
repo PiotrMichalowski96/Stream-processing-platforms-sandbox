@@ -35,6 +35,12 @@
       <groupId>com.university</groupId>
       <artifactId>stock-market-java-model</artifactId>
       <version>${stock.market.shared.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.kafka</groupId>
+          <artifactId>kafka_2.13</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.university</groupId>
