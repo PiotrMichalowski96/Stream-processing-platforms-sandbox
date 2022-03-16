@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class AwsLambdaStockStatusConfig {
   public Consumer<KinesisEvent> kinesisRecordsProcessing() {
     return kinesisEvent -> {
 
-      logger.info("Executing Spring Adapter for AWS Lambda");
+      logger.info("Executing Spring Adapter for AWS Lambda"); //TODO: remove this log
 
       kinesisEvent.getRecords().stream()
           .map(rec -> rec.getKinesis().getData().array())
@@ -38,15 +39,18 @@ public class AwsLambdaStockStatusConfig {
           .peek(json -> logger.info("Json: {}", json))
           .map(json -> JsonUtil.convertToObjectFrom(Stock.class, json))
           .filter(Objects::nonNull)
-          .map(stock -> {
-            String stockKey = stock.getTicker();
-            StockStatus previousStockStatus = actualStockStatusMap.getOrDefault(stockKey, new StockStatus());
-            StockStatus actualStockStatus = tradingAnalysisService.updateTradeAnalysis(previousStockStatus, stock);
-            actualStockStatusMap.put(stockKey, actualStockStatus);
-            return actualStockStatus;
-          })
+          .map(calculateActualStockStatus())
           .forEach(stockStatusRepository::send);
     };
   }
 
+  private Function<Stock, StockStatus> calculateActualStockStatus() {
+    return stock -> {
+      String stockKey = stock.getTicker();
+      StockStatus previousStockStatus = actualStockStatusMap.getOrDefault(stockKey, new StockStatus());
+      StockStatus actualStockStatus = tradingAnalysisService.updateTradeAnalysis(previousStockStatus, stock);
+      actualStockStatusMap.put(stockKey, actualStockStatus);
+      return actualStockStatus;
+    };
+  }
 }
