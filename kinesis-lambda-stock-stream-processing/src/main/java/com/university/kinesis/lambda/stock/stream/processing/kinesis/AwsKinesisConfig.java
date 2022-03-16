@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AwsKinesisConfig {
 
-  @Value("${producer.kinesis.aws.access.key}")
+  @Value("${kinesis.aws.access.key}")
   private String accessKey;
 
-  @Value("${producer.kinesis.aws.secret.key}")
+  @Value("${kinesis.aws.secret.key}")
   private String secretKey;
 
-  @Value("${producer.kinesis.aws.region}")
+  @Value("${kinesis.aws.region}")
   private String region;
 
   @Bean

@@ -5,6 +5,7 @@ import com.university.kinesis.lambda.stock.stream.processing.kinesis.KinesisStoc
 import com.university.stock.market.common.util.JsonUtil;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
+import com.university.stock.market.trading.analysis.config.TradingAnalysisConfig;
 import com.university.stock.market.trading.analysis.service.TradingAnalysisService;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-//TODO: change logging to debbug level
+import org.springframework.context.annotation.Import;
 
 @Slf4j
 @Configuration
+@Import(TradingAnalysisConfig.class)
 @RequiredArgsConstructor
 public class AwsLambdaStockStatusConfig {
 
@@ -29,19 +30,14 @@ public class AwsLambdaStockStatusConfig {
 
   @Bean
   public Consumer<KinesisEvent> kinesisRecordsProcessing() {
-    return kinesisEvent -> {
-
-      logger.info("Executing Spring Adapter for AWS Lambda"); //TODO: remove this log
-
-      kinesisEvent.getRecords().stream()
-          .map(rec -> rec.getKinesis().getData().array())
-          .map(String::new)
-          .peek(json -> logger.info("Json: {}", json))
-          .map(json -> JsonUtil.convertToObjectFrom(Stock.class, json))
-          .filter(Objects::nonNull)
-          .map(calculateActualStockStatus())
-          .forEach(stockStatusRepository::send);
-    };
+    return kinesisEvent -> kinesisEvent.getRecords().stream()
+        .map(rec -> rec.getKinesis().getData().array())
+        .map(String::new)
+        .peek(json -> logger.debug("Json: {}", json))
+        .map(json -> JsonUtil.convertToObjectFrom(Stock.class, json))
+        .filter(Objects::nonNull)
+        .map(calculateActualStockStatus())
+        .forEach(stockStatusRepository::send);
   }
 
   private Function<Stock, StockStatus> calculateActualStockStatus() {

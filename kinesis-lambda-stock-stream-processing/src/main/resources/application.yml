@@ -1,0 +1,30 @@
+application:
+    name: kinesis-stock-stream-processing-app
+
+############################################################
+# AWS Kinesis properties
+############################################################
+kinesis:
+    aws:
+        region: us-east-1
+        stream: stock_test
+        access:
+            key: ${aws.access.key} #Here add your AWS access key
+        secret:
+            key: ${aws.secret.key} #Here add your AWS secret key
+
+############################################################
+# Trading analysis module properties
+############################################################
+trading:
+    maximumBars: 400
+    tradeDurationInMillis: 100
+
+############################################################
+# Logging level
+############################################################
+logging:
+    level:
+        com.university.kinesis.lambda.stock.stream.processing.lambda: debug
+        com.university.kinesis.lambda.stock.stream.processing.kinesis: debug
+        com.university.stock.market.trading.analysis.module: debug

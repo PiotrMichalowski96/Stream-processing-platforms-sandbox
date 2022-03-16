@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class KinesisStockStatusRepository {
 
-  @Value("${producer.kinesis.aws.stream}")
+  @Value("${kinesis.aws.stream}")
   private final String stream;
   private final AmazonKinesis kinesis;
 
