@@ -8,18 +8,27 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @UtilityClass
 public class JsonUtil {
 
-  private String readFileAsString(String filePath) throws IOException {
-    FileInputStream fis = new FileInputStream(filePath);
-    return IOUtils.toString(fis, StandardCharsets.UTF_8);
+  public static String readFileAsString(String filePath) {
+    try {
+      FileInputStream fis = new FileInputStream(filePath);
+      return IOUtils.toString(fis, StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   public static <T> T extractFromJson(Class<T> clazz, String filePath) {
+    String jsonText = readFileAsString(filePath);
+    if(StringUtils.isBlank(jsonText)) {
+      return null;
+    }
     try {
-      String jsonText = readFileAsString(filePath);
       ObjectMapper mapper = new ObjectMapper();
       return mapper.readValue(jsonText, clazz);
     } catch (IOException e) {
