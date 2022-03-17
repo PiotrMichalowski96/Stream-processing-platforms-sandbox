@@ -14,13 +14,19 @@
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <artifactId>spring-boot-starter</artifactId>
     </dependency>
 
     <dependency>
       <groupId>com.university</groupId>
       <artifactId>stock-market-java-model</artifactId>
       <version>0.0.2-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.kafka</groupId>
+          <artifactId>kafka_2.13</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>

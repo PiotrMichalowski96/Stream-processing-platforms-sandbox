@@ -7,7 +7,7 @@ import com.university.stock.market.model.domain.StockStatus;
 import com.university.stock.market.model.domain.StockStatus.TradeAction;
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import lombok.NonNull;
@@ -73,7 +73,7 @@ public class TradingAnalysisModuleTa4jImpl implements TradingAnalysisModule<Stoc
   }
 
   private ZonedDateTime createBarTimestamp(Stock trade) {
-    ZonedDateTime timestamp = trade.getTimestamp().atZone(ZoneId.systemDefault());
+    ZonedDateTime timestamp = trade.getTimestamp().atZone(ZoneOffset.UTC);
     if (series.isEmpty()) {
       return timestamp;
     }

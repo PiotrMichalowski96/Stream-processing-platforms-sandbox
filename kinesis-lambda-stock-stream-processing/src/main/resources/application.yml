@@ -1,0 +1,34 @@
+application:
+    name: kinesis-stock-stream-processing-app
+
+############################################################
+# AWS Lambda definition
+############################################################
+spring:
+    cloud:
+        function:
+            definition: kinesisRecordsProcessing
+
+############################################################
+# AWS Kinesis properties
+############################################################
+kinesis:
+    aws:
+        region: us-east-1
+        stream: stock_status_test
+
+############################################################
+# Trading analysis module properties
+############################################################
+trading:
+    maximumBars: 400
+    tradeDurationInMillis: 100
+
+############################################################
+# Logging level
+############################################################
+logging:
+    level:
+        com.university.kinesis.lambda.stock.stream.processing.lambda: debug
+        com.university.kinesis.lambda.stock.stream.processing.kinesis: debug
+        com.university.stock.market.trading.analysis.module: debug
