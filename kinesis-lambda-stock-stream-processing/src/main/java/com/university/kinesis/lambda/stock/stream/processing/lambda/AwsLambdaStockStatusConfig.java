@@ -1,7 +1,6 @@
 package com.university.kinesis.lambda.stock.stream.processing.lambda;
 
-import static com.university.stock.market.model.domain.ResultMetadataDetails.StreamProcessing.AWS_KINESIS_LAMBDA;
-import static com.university.stock.market.model.util.ResultMetadataDetailsUtil.createMetadataDetails;
+import static com.university.kinesis.lambda.stock.stream.processing.util.MetadataDetailsUtil.createResultMetadataDetails;
 
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
 import com.university.kinesis.lambda.stock.stream.processing.kinesis.KinesisStockStatusRepository;
@@ -57,7 +56,7 @@ public class AwsLambdaStockStatusConfig {
 
   private Function<StockStatus, StockStatus> updateMetadataDetails() {
     return stockStatus -> {
-      ResultMetadataDetails resultMetadataDetails = createMetadataDetails(AWS_KINESIS_LAMBDA, stockStatus.getRecentQuota());
+      ResultMetadataDetails resultMetadataDetails = createResultMetadataDetails(stockStatus.getRecentQuota());
       stockStatus.setResultMetadataDetails(resultMetadataDetails);
       return stockStatus;
     };
