@@ -5,5 +5,9 @@
   "price": 43909.0000,
   "currency": "US Dollar",
   "volume": 71024,
-  "timestamp":"2022-02-11 20:59:48"
+  "timestamp":"2022-02-11 20:59:48",
+  "inputMetadataDetails": {
+    "experimentCase": "Unknown size of stream",
+    "description": "Real random stream of data from online API"
+  }
 }

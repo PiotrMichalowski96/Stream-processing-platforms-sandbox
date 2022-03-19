@@ -5,5 +5,9 @@
   "price": 115.2300,
   "currency": "Japanese Yen",
   "volume": 900,
-  "timestamp": "2022-02-17 22:24:32"
+  "timestamp": "2022-02-17 22:24:32",
+  "inputMetadataDetails": {
+    "experimentCase": "Unknown size of stream",
+    "description": "Real random stream of data from online API"
+  }
 }

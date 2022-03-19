@@ -38,6 +38,7 @@ public class Stock implements Serializable {
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   private LocalDateTime timestamp;
+  private InputMetadataDetails inputMetadataDetails;
 
   public static class StockBuilder {
 

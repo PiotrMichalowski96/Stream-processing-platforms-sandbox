@@ -1,8 +1,11 @@
 package com.university.kinesis.lambda.stock.stream.processing.lambda;
 
+import static com.university.kinesis.lambda.stock.stream.processing.util.MetadataDetailsUtil.createResultMetadataDetails;
+
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
 import com.university.kinesis.lambda.stock.stream.processing.kinesis.KinesisStockStatusRepository;
 import com.university.stock.market.common.util.JsonUtil;
+import com.university.stock.market.model.domain.ResultMetadataDetails;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
 import com.university.stock.market.trading.analysis.config.TradingAnalysisConfig;
@@ -37,6 +40,7 @@ public class AwsLambdaStockStatusConfig {
         .map(json -> JsonUtil.convertToObjectFrom(Stock.class, json))
         .filter(Objects::nonNull)
         .map(calculateActualStockStatus())
+        .map(updateMetadataDetails())
         .forEach(stockStatusRepository::send);
   }
 
@@ -47,6 +51,14 @@ public class AwsLambdaStockStatusConfig {
       StockStatus actualStockStatus = tradingAnalysisService.updateTradeAnalysis(previousStockStatus, stock);
       actualStockStatusMap.put(stockKey, actualStockStatus);
       return actualStockStatus;
+    };
+  }
+
+  private Function<StockStatus, StockStatus> updateMetadataDetails() {
+    return stockStatus -> {
+      ResultMetadataDetails resultMetadataDetails = createResultMetadataDetails(stockStatus.getRecentQuota());
+      stockStatus.setResultMetadataDetails(resultMetadataDetails);
+      return stockStatus;
     };
   }
 }

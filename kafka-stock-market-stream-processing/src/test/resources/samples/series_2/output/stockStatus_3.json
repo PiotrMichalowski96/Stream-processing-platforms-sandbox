@@ -6,10 +6,18 @@
     "price": 43909.0000,
     "currency": "US Dollar",
     "volume": 71024,
-    "timestamp":"2022-02-11 20:59:48"
+    "timestamp":"2022-02-11 20:59:48",
+    "inputMetadataDetails": {
+      "experimentCase": "Unknown size of stream",
+      "description": "Real random stream of data from online API"
+    }
   },
   "maxPrice": 44002.0000,
   "minPrice": 43909.0000,
   "diffPrice": -93.0000,
-  "tradeAction": "BUY"
+  "tradeAction": "BUY",
+  "resultMetadataDetails": {
+    "streamProcessing": "KAFKA_STREAMS",
+    "processingTimeInMillis": 100
+  }
 }

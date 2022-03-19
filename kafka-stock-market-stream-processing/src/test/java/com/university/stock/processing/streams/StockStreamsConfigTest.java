@@ -88,7 +88,12 @@ class StockStreamsConfigTest {
     Map<String, StockStatus> actualStockStatus = outputTopic.readKeyValuesToMap();
 
     //then
-    Assertions.assertThat(actualStockStatus).usingRecursiveComparison().isEqualTo(expectedStockStatus);
+    Assertions.assertThat(actualStockStatus.keySet()).usingRecursiveComparison()
+        .isEqualTo(expectedStockStatus.keySet());
+
+    Assertions.assertThat(actualStockStatus.values()).usingRecursiveComparison()
+        .ignoringFields("resultMetadataDetails.processingTimeInMillis")
+        .isEqualTo(expectedStockStatus.values());
   }
 
   private static StockStreamsConfig initializeStockStreamsConfig() {

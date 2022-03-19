@@ -1,5 +1,6 @@
 package com.university.stock.market.model.util;
 
+import com.university.stock.market.model.domain.InputMetadataDetails;
 import com.university.stock.market.model.domain.Stock;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -21,7 +22,7 @@ public class StockGenerator {
       "Physical Currency", "ETF");
   private static final List<String> CURRENCIES = List.of("USD", "EUR", "PLN", "GBP", "BTC", "CHF");
 
-  public static List<Stock> generateRandomStockList(int uniqueStocks) {
+  public static List<Stock> generateRandomStockList(int uniqueStocks, InputMetadataDetails inputMetadataDetails) {
     return Stream.generate(() -> Stock.builder()
             .ticker(RandomStringUtils.randomAlphabetic(4).toUpperCase())
             .type(randomStringFrom(STOCK_TYPES))
@@ -30,6 +31,7 @@ public class StockGenerator {
             .currency(randomStringFrom(CURRENCIES))
             .volume(BigInteger.valueOf(RandomUtils.nextLong(100L, 10000L)))
             .timestamp(LocalDateTime.now())
+            .inputMetadataDetails(inputMetadataDetails)
             .build())
         .limit(uniqueStocks)
         .collect(Collectors.toList());

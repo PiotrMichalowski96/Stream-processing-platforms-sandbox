@@ -124,7 +124,12 @@ class StockMarketDStreamIT {
     Map<String, StockStatus> actualStockStatus = readKeyStockStatusToMap();
 
     //then
-    assertThat(actualStockStatus).usingRecursiveComparison().isEqualTo(expectedStockStatus);
+    assertThat(actualStockStatus.keySet()).usingRecursiveComparison()
+        .isEqualTo(expectedStockStatus.keySet());
+
+    assertThat(actualStockStatus.values()).usingRecursiveComparison()
+        .ignoringFields("resultMetadataDetails.processingTimeInMillis")
+        .isEqualTo(expectedStockStatus.values());
   }
 
   private void createAndSendRecord(Stock stock) {

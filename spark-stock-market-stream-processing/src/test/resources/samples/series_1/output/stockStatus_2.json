@@ -6,10 +6,18 @@
     "price": 13418.7890,
     "currency": "USD",
     "volume": 555,
-    "timestamp": "2022-02-17 22:26:32"
+    "timestamp": "2022-02-17 22:26:32",
+    "inputMetadataDetails": {
+      "experimentCase": "Unknown size of stream",
+      "description": "Real random stream of data from online API"
+    }
   },
   "maxPrice": 13688.2490,
   "minPrice": 13418.7890,
   "diffPrice": -156.4800,
-  "tradeAction": "BUY"
+  "tradeAction": "BUY",
+  "resultMetadataDetails": {
+    "streamProcessing": "SPARK",
+    "processingTimeInMillis": 100
+  }
 }

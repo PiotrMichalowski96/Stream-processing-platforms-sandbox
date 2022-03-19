@@ -3,6 +3,7 @@ package com.university.stock.producer.supplier;
 import static com.university.stock.producer.webservice.config.TwelveDataWebservicePredicate.nonSubscribeEventPredicate;
 
 import com.university.stock.market.common.util.JsonUtil;
+import com.university.stock.market.model.domain.InputMetadataDetails;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.dto.QuoteDTO;
 import com.university.stock.producer.repository.StockMarketRepository;
@@ -28,6 +29,7 @@ public class WebserviceStockProducer implements StockMarketProducer {
   private final TwelveDataClient client;
   private final StockMapper stockMapper;
   private final StockMarketRepository stockMarketRepository;
+  private final InputMetadataDetails inputMetadataDetails;
 
   @Override
   public void startSendingStocksProcess() {
@@ -67,6 +69,10 @@ public class WebserviceStockProducer implements StockMarketProducer {
             .mapNotNull(quoteJson -> JsonUtil.convertToObjectFrom(QuoteDTO.class, quoteJson))
             .filter(nonSubscribeEventPredicate())
             .map(stockMapper::toStock)
+            .map(stock -> {
+              stock.setInputMetadataDetails(inputMetadataDetails);
+              return stock;
+            })
             .doOnNext(stock -> {
               logger.debug("Client({}) -> received: [{}]", session.getId(), stock.toString());
               stockMarketRepository.send(stock);

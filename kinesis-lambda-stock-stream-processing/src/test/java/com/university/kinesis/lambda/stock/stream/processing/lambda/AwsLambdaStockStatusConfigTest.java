@@ -79,7 +79,12 @@ class AwsLambdaStockStatusConfigTest {
     stockStatusArgumentCaptor.getAllValues()
         .forEach(stockStatus -> actualStockStatus.put(stockStatus.getRecentQuota().getTicker(), stockStatus));
 
-    assertThat(actualStockStatus).usingRecursiveComparison().isEqualTo(expectedStockStatus);
+    assertThat(actualStockStatus.keySet()).usingRecursiveComparison()
+        .isEqualTo(expectedStockStatus.keySet());
+
+    assertThat(actualStockStatus.values()).usingRecursiveComparison()
+        .ignoringFields("resultMetadataDetails.processingTimeInMillis")
+        .isEqualTo(expectedStockStatus.values());
   }
 
   private KinesisEvent createInputKinesisEventWith(String message) {

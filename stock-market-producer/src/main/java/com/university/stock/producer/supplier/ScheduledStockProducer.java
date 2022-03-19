@@ -1,5 +1,6 @@
 package com.university.stock.producer.supplier;
 
+import com.university.stock.market.model.domain.InputMetadataDetails;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.util.StockGenerator;
 import com.university.stock.producer.repository.StockMarketRepository;
@@ -19,10 +20,11 @@ public class ScheduledStockProducer implements StockMarketProducer {
   private final List<Stock> stockList;
 
   public ScheduledStockProducer(StockMarketRepository stockMarketRepository,
-      @Value("${stock.market.unique.quotes:30}")Integer uniqueQuotes) {
+      @Value("${stock.market.unique.quotes:30}")Integer uniqueQuotes,
+      InputMetadataDetails inputMetadataDetails) {
 
     this.stockMarketRepository = stockMarketRepository;
-    this.stockList = StockGenerator.generateRandomStockList(uniqueQuotes);
+    this.stockList = StockGenerator.generateRandomStockList(uniqueQuotes, inputMetadataDetails);
   }
 
   @Scheduled(fixedRateString = "${stock.market.schedule:500}")
