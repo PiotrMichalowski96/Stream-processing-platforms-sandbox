@@ -27,7 +27,7 @@ class ScheduledStockProducerTest {
   void shouldProduceStocks() {
     //given
     int stockListSize = 30;
-    ScheduledStockProducer stockProducer = new ScheduledStockProducer(stockMarketRepository, stockListSize);
+    ScheduledStockProducer stockProducer = new ScheduledStockProducer(stockMarketRepository, stockListSize, null);
 
     //when
     stockProducer.startSendingStocksProcess();

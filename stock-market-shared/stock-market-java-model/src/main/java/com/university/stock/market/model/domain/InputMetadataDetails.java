@@ -1,7 +1,6 @@
 package com.university.stock.market.model.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -17,16 +16,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class StockStatus implements Serializable {
+public class InputMetadataDetails implements Serializable {
 
-  private Stock recentQuota;
-  private BigDecimal maxPrice;
-  private BigDecimal minPrice;
-  private BigDecimal diffPrice;
-  private TradeAction tradeAction;
-  private ResultMetadataDetails resultMetadataDetails;
-
-  public enum TradeAction {
-    BUY, SELL
-  }
+  private String experimentCase;
+  private String description;
 }

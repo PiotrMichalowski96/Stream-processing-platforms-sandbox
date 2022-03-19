@@ -2,6 +2,7 @@ package com.university.stock.market.common.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.university.stock.market.model.domain.InputMetadataDetails;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.dto.QuoteDTO;
 import java.math.BigInteger;
@@ -27,6 +28,7 @@ class JsonUtilTest {
         .currency("USD")
         .volume(BigInteger.valueOf(100))
         .timestamp(LocalDateTime.of(2022, 2, 11, 20, 49, 48))
+        .inputMetadataDetails(new InputMetadataDetails("Unknown size of stream", "Real random stream of data from online API"))
         .build();
 
     //when
@@ -47,10 +49,10 @@ class JsonUtilTest {
         .currency("USD")
         .volume(BigInteger.valueOf(123L))
         .timestamp(LocalDateTime.of(2022, 3, 13, 20, 20, 20))
+        .inputMetadataDetails(new InputMetadataDetails("Unknown size of stream", "Real random stream of data from online API"))
         .build();
 
-    String expectedJson = "{\"ticker\":\"ABC\",\"type\":\"Type\",\"exchange\":\"The Exchange\",\"price\":100.0000,\"currency\":\"USD\",\"volume\":123,\"timestamp\":\"2022-03-13 20:20:20\"}";
-
+    String expectedJson = "{\"ticker\":\"ABC\",\"type\":\"Type\",\"exchange\":\"The Exchange\",\"price\":100.0000,\"currency\":\"USD\",\"volume\":123,\"timestamp\":\"2022-03-13 20:20:20\",\"inputMetadataDetails\":{\"experimentCase\":\"Unknown size of stream\",\"description\":\"Real random stream of data from online API\"}}";
     //when
     String actualJson = JsonUtil.convertToJson(stock);
 

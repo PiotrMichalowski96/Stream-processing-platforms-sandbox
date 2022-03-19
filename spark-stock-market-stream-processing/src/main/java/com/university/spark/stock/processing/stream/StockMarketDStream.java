@@ -1,7 +1,11 @@
 package com.university.spark.stock.processing.stream;
 
+import static com.university.stock.market.model.domain.ResultMetadataDetails.StreamProcessing.SPARK;
+import static com.university.stock.market.model.util.ResultMetadataDetailsUtil.createMetadataDetails;
+
 import com.university.spark.stock.processing.repository.StockStatusRepository;
 import com.university.spark.stock.processing.repository.StockStatusRepositoryImpl;
+import com.university.stock.market.model.domain.ResultMetadataDetails;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
 import com.university.stock.market.model.domain.StockStatus.TradeAction;
@@ -56,7 +60,10 @@ public class StockMarketDStream {
         .mapValues(StockMarketDStream::mapToStockStatus)
         .reduceByKeyAndWindow((oldStatus, newStatus) -> {
               Stock newTrade = newStatus.getRecentQuota();
-              return TRADING_ANALYSIS_SERVICE.updateTradeAnalysis(oldStatus, newTrade);
+              StockStatus updatedStatus = TRADING_ANALYSIS_SERVICE.updateTradeAnalysis(oldStatus, newTrade);
+              ResultMetadataDetails resultMetadataDetails = createMetadataDetails(SPARK, newTrade);
+              updatedStatus.setResultMetadataDetails(resultMetadataDetails);
+              return updatedStatus;
             },
             Durations.seconds(10))
         .foreachRDD(rdd -> rdd.collect()

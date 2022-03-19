@@ -45,6 +45,15 @@ stock:
     schedule: "500"
 
 ############################################################
+# Master Thesis experiment case properties
+############################################################
+master:
+  thesis:
+    experiment:
+      case: "Unknown size of stream"
+      description: "Real random stream of data from online API"
+
+############################################################
 # Logging level
 ############################################################
 logging:

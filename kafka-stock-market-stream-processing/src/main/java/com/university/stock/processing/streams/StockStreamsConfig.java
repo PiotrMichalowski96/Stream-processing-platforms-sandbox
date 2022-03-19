@@ -1,5 +1,9 @@
 package com.university.stock.processing.streams;
 
+import static com.university.stock.market.model.domain.ResultMetadataDetails.StreamProcessing.KAFKA_STREAMS;
+import static com.university.stock.market.model.util.ResultMetadataDetailsUtil.createMetadataDetails;
+
+import com.university.stock.market.model.domain.ResultMetadataDetails;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
 import com.university.stock.market.trading.analysis.config.TradingAnalysisConfig;
@@ -87,7 +91,12 @@ public class StockStreamsConfig {
         .groupByKey(Grouped.with(Serdes.String(), stockSerde))
         .aggregate(
             StockStatus::new,
-            (key, stock, stockStatus) -> tradingAnalysisService.updateTradeAnalysis(stockStatus, stock),
+            (key, stock, stockStatus) -> {
+              StockStatus updatedStockStatus = tradingAnalysisService.updateTradeAnalysis(stockStatus, stock);
+              ResultMetadataDetails resultMetadataDetails = createMetadataDetails(KAFKA_STREAMS, stock);
+              updatedStockStatus.setResultMetadataDetails(resultMetadataDetails);
+              return updatedStockStatus;
+            },
             Materialized.<String, StockStatus, KeyValueStore<Bytes, byte[]>>as("stock-status-agg")
                 .withKeySerde(Serdes.String())
                 .withValueSerde(stockStatusSerde)
