@@ -8,12 +8,14 @@ import com.university.stock.market.common.util.JsonUtil;
 import com.university.stock.market.model.domain.StockStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@ConditionalOnProperty(value = "consumer.kafka.enable", havingValue = "true")
 public class KafkaMessageListener implements MessageListener {
 
   private final ElasticProducer elasticProducer;
