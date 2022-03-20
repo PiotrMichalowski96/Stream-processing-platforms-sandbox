@@ -1,0 +1,20 @@
+server:
+  port: 8083
+kafka:
+  bootstrapAddress: 127.0.0.1:9092
+  topic: stock_status_test
+  consumer:
+    groupId: kafka-elasticsearch-consumer
+elasticsearch:
+  port: 443
+  hostname: stream-processing-pl-2734991925.us-east-1.bonsaisearch.net
+  username: ${bonsai.username}
+  password: ${bonsai.password}
+  index: stock-status-test
+
+############################################################
+# Logging level
+############################################################
+logging:
+  level:
+    com.university.elasticsearch.stock.consumer: debug
