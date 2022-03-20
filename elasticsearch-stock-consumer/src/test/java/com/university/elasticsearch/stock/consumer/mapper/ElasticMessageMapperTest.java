@@ -43,6 +43,8 @@ class ElasticMessageMapperTest {
     StockElasticMessage actualElasticMessage = mapper.toStockElasticMessage(stockStatus, exampleJson);
 
     //then
-    assertThat(actualElasticMessage).usingRecursiveComparison().isEqualTo(expectedElasticMessage);
+    assertThat(actualElasticMessage).usingRecursiveComparison()
+        .ignoringFields("timestamp")
+        .isEqualTo(expectedElasticMessage);
   }
 }

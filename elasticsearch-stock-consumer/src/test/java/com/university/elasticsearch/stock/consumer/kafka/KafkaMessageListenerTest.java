@@ -71,6 +71,8 @@ class KafkaMessageListenerTest {
     //then
     verify(elasticProducer).sendMessage(messageCaptor.capture());
     StockElasticMessage actualElasticMessage = messageCaptor.getValue();
-    assertThat(actualElasticMessage).usingRecursiveComparison().isEqualTo(expectedElasticMessage);
+    assertThat(actualElasticMessage).usingRecursiveComparison()
+        .ignoringFields("timestamp")
+        .isEqualTo(expectedElasticMessage);
   }
 }
