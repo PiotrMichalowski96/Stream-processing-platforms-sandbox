@@ -18,10 +18,10 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 @ConditionalOnProperty(value = "consumer.kafka.enable", havingValue = "true")
 public class KafkaConsumerConfig {
 
-  @Value("${kafka.bootstrapAddress}")
+  @Value("${consumer.kafka.bootstrapAddress}")
   private String bootstrapAddress;
 
-  @Value("kafka.consumer.groupId")
+  @Value("consumer.kafka.consumer.groupId")
   private String groupId;
 
   public ConsumerFactory<Long, String> consumerFactory() {

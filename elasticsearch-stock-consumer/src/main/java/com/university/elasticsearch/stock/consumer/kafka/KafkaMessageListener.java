@@ -21,7 +21,7 @@ public class KafkaMessageListener implements MessageListener {
   private final ElasticProducer elasticProducer;
   private final ElasticMessageMapper elasticMessageMapper;
 
-  @KafkaListener(topics = "${kafka.topic}", containerFactory = "kafkaListenerContainerFactory")
+  @KafkaListener(topics = "${consumer.kafka.topic}", containerFactory = "kafkaListenerContainerFactory")
   @Override
   public void stockStatusListener(String stockStatusJson) {
 

@@ -6,7 +6,7 @@ consumer:
   # Kafka properties
   ############################################################
   kafka:
-    enable: false
+    enable: true
     bootstrapAddress: 127.0.0.1:9092
     topic: stock_status_test
     consumer:
@@ -16,7 +16,7 @@ consumer:
   # AWS Kinesis properties
   ############################################################
   kinesis:
-    enable: true
+    enable: false
     schedule: 5000 #5 sec
     aws:
       region: us-east-1
