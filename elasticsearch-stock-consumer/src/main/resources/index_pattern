@@ -1,0 +1,26 @@
+#Create index template
+PUT /_template/streaming-platform
+{
+  "index_patterns": ["streaming-platform"],
+  "settings": {
+    "index.mapping.coerce": false
+  },
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "id": { "type": "text" },
+      "timestamp": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss"
+      },
+      "streamPlatform": { "type": "keyword" },
+      "processingTimeInMillis": { "type": "long" },
+      "experimentCase": { "type": "keyword" },
+      "comment": { "type": "keyword" },
+      "message": { "type": "keyword" }
+    }
+  }
+}
+
+#Create index
+PUT /streaming-platform

@@ -1,0 +1,44 @@
+server:
+  port: 8083
+
+consumer:
+  ############################################################
+  # Kafka properties
+  ############################################################
+  kafka:
+    enable: true
+    bootstrapAddress: 127.0.0.1:9092
+    topic: stock_status_test
+    consumer:
+      groupId: kafka-elasticsearch-consumer
+
+  ############################################################
+  # AWS Kinesis properties
+  ############################################################
+  kinesis:
+    enable: false
+    schedule: 5000 #5 sec
+    aws:
+      region: us-east-1
+      stream: stock_status_test
+      access:
+        key: ${aws.access.key} #Here add your AWS access key
+      secret:
+        key: ${aws.secret.key} #Here add your AWS secret key
+
+############################################################
+# Elasticsearch properties
+############################################################
+elasticsearch:
+  port: 443
+  hostname: stream-processing-pl-2734991925.us-east-1.bonsaisearch.net
+  username: ${bonsai.username}
+  password: ${bonsai.password}
+  index: streaming-platform
+
+############################################################
+# Logging level
+############################################################
+logging:
+  level:
+    com.university.elasticsearch.stock.consumer: debug
