@@ -34,7 +34,7 @@ elasticsearch:
   hostname: stream-processing-pl-2734991925.us-east-1.bonsaisearch.net
   username: ${bonsai.username}
   password: ${bonsai.password}
-  index: stock-status-test
+  index: streaming-platform
 
 ############################################################
 # Logging level
