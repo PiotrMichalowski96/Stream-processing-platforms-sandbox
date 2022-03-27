@@ -42,7 +42,7 @@ public class FlinkStockStreamBuilder {
   private SinkFunction<StockStatus> stockStatusSinkFunction;
 
   public FlinkStockStreamBuilder withKafkaSource(KafkaSource<String> kafkaSource) {
-    this.inputStockStream = streamEnv.fromSource(kafkaSource, WatermarkStrategy.forMonotonousTimestamps(), KAFKA_SOURCE_NAME);
+    this.inputStockStream = streamEnv.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), KAFKA_SOURCE_NAME);
     return this;
   }
 
@@ -69,13 +69,12 @@ public class FlinkStockStreamBuilder {
             .map(Stock::getTicker)
             .isPresent())
         .keyBy(stockStatus -> stockStatus.getRecentQuota().getTicker())
-        .window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
+        .window(TumblingProcessingTimeWindows.of(Time.seconds(30)))
         .reduce((oldStatus, newStatus) -> {
           Stock newTrade = newStatus.getRecentQuota();
           StockStatus updatedStatus = TRADING_ANALYSIS_SERVICE.updateTradeAnalysis(oldStatus, newTrade);
           ResultMetadataDetails resultMetadataDetails = createMetadataDetails(FLINK, newTrade);
           updatedStatus.setResultMetadataDetails(resultMetadataDetails);
-          logger.warn("Ticker123: {}, Old: {}, New: {}", newStatus.getRecentQuota().getTicker(), oldStatus.getRecentQuota().getTimestamp(), newStatus.getRecentQuota().getTimestamp());
           return updatedStatus;
         })
         .filter(stockStatus -> Optional.ofNullable(stockStatus.getResultMetadataDetails()).isPresent());
