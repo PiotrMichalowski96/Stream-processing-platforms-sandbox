@@ -1,0 +1,13 @@
+{
+  "ticker": "BTC/USD",
+  "type": "Digital Currency",
+  "exchange": "Binance",
+  "price": 43993.0000,
+  "currency": "US Dollar",
+  "volume": 72110,
+  "timestamp":"2022-02-11 20:52:48",
+  "inputMetadataDetails": {
+    "experimentCase": "Unknown size of stream",
+    "description": "Real random stream of data from online API"
+  }
+}

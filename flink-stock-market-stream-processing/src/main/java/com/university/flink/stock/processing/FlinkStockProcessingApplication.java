@@ -1,6 +1,10 @@
 package com.university.flink.stock.processing;
 
-import com.university.flink.stock.processing.stream.FlinkStockStream;
+import com.university.flink.stock.processing.kafka.KafkaPipelineFactory;
+import com.university.flink.stock.processing.stream.FlinkStockStreamBuilder;
+import com.university.stock.market.model.domain.StockStatus;
+import org.apache.flink.connector.kafka.sink.KafkaSink;
+import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class FlinkStockProcessingApplication {
@@ -16,9 +20,15 @@ public class FlinkStockProcessingApplication {
 
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-    FlinkStockStream stockStream = new FlinkStockStream(env, BOOTSTRAP, INPUT_TOPIC, OUTPUT_TOPIC);
+    KafkaPipelineFactory kafkaPipelineFactory = new KafkaPipelineFactory(BOOTSTRAP, INPUT_TOPIC, OUTPUT_TOPIC);
 
-    stockStream.stockStream();
+    KafkaSource<String> kafkaSource = kafkaPipelineFactory.createKafkaSource();
+    KafkaSink<StockStatus> kafkaSink = kafkaPipelineFactory.createKafkaSink();
+
+    new FlinkStockStreamBuilder(env)
+        .withKafkaSource(kafkaSource)
+        .withKafkaSink(kafkaSink)
+        .build();
 
     env.execute(JOB_NAME);
   }

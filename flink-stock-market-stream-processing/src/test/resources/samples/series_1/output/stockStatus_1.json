@@ -1,0 +1,23 @@
+{
+  "recentQuota": {
+    "ticker": "USD/JPY",
+    "type": "Physical Currency",
+    "exchange": "NASDAQ",
+    "price": 115.2300,
+    "currency": "Japanese Yen",
+    "volume": 900,
+    "timestamp": "2022-02-17 22:24:32",
+    "inputMetadataDetails": {
+      "experimentCase": "Unknown size of stream",
+      "description": "Real random stream of data from online API"
+    }
+  },
+  "maxPrice": 115.2300,
+  "minPrice": 114.0230,
+  "diffPrice": 0.4010,
+  "tradeAction": "SELL",
+  "resultMetadataDetails": {
+    "streamProcessing": "FLINK",
+    "processingTimeInMillis": 100
+  }
+}

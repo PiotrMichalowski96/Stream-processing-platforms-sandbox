@@ -1,0 +1,13 @@
+{
+  "ticker": "AAPL",
+  "type": "Common Stock",
+  "exchange": "NASDAQ",
+  "price": 166.5600,
+  "currency": "USD",
+  "volume": 965,
+  "timestamp":"2022-02-11 20:56:48",
+  "inputMetadataDetails": {
+    "experimentCase": "Unknown size of stream",
+    "description": "Real random stream of data from online API"
+  }
+}
