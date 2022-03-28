@@ -1,0 +1,13 @@
+{
+  "ticker": "USD/JPY",
+  "type": "Physical Currency",
+  "exchange": "NASDAQ",
+  "price": 115.0100,
+  "currency": "Japanese Yen",
+  "volume": 777,
+  "timestamp": "2022-02-17 22:13:32",
+  "inputMetadataDetails": {
+    "experimentCase": "Unknown size of stream",
+    "description": "Real random stream of data from online API"
+  }
+}

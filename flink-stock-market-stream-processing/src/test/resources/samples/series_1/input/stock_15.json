@@ -1,0 +1,13 @@
+{
+  "ticker": "IXIC",
+  "type": "Index",
+  "exchange": "NASDAQ",
+  "price": 13418.7890,
+  "currency": "USD",
+  "volume": 555,
+  "timestamp": "2022-02-17 22:26:32",
+  "inputMetadataDetails": {
+    "experimentCase": "Unknown size of stream",
+    "description": "Real random stream of data from online API"
+  }
+}

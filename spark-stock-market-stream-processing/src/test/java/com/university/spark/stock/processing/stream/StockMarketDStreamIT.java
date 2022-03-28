@@ -1,25 +1,24 @@
 package com.university.spark.stock.processing.stream;
 
+import static com.university.stock.market.model.kafka.KafkaUtil.createAndSendRecord;
+import static com.university.stock.market.model.kafka.KafkaUtil.readKeyStockStatusToMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.university.spark.stock.processing.config.SparkKafkaConfigRetriever;
-import com.university.spark.stock.processing.kafka.KafkaUtil;
 import com.university.stock.market.common.util.JsonUtil;
 import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
-import java.time.Duration;
-import java.util.HashMap;
+import com.university.stock.market.model.kafka.KafkaUtil;
+import com.university.stock.market.model.kafka.StockMarketDeserializer;
+import com.university.stock.market.model.kafka.StockMarketSerializer;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.spark.SparkConf;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
@@ -68,8 +67,8 @@ class StockMarketDStreamIT {
     streamProducerProp = CONFIG_RETRIEVER.createKafkaProducerProperties();
     streamProp = CONFIG_RETRIEVER.configureKafkaParams();
 
-    producer = KafkaUtil.createProducer(bootstrapServer);
-    consumer = KafkaUtil.createConsumer(bootstrapServer);
+    producer = KafkaUtil.createProducer(bootstrapServer,  new StockMarketSerializer<>());
+    consumer = KafkaUtil.createConsumer(bootstrapServer, new StockMarketDeserializer<>(StockStatus.class));
   }
 
   @BeforeEach
@@ -117,11 +116,11 @@ class StockMarketDStreamIT {
         .collect(Collectors.toMap(stockStatus -> stockStatus.getRecentQuota().getTicker(), stockStatus -> stockStatus));
 
     //when
-    inputStockList.forEach(this::createAndSendRecord);
+    inputStockList.forEach(stock -> createAndSendRecord(producer, inputTopic, stock));
 
     Thread.sleep(5000);
 
-    Map<String, StockStatus> actualStockStatus = readKeyStockStatusToMap();
+    Map<String, StockStatus> actualStockStatus = readKeyStockStatusToMap(consumer);
 
     //then
     assertThat(actualStockStatus.keySet()).usingRecursiveComparison()
@@ -130,24 +129,5 @@ class StockMarketDStreamIT {
     assertThat(actualStockStatus.values()).usingRecursiveComparison()
         .ignoringFields("resultMetadataDetails.processingTimeInMillis")
         .isEqualTo(expectedStockStatus.values());
-  }
-
-  private void createAndSendRecord(Stock stock) {
-    String key = RandomStringUtils.randomAlphanumeric(10);
-
-    ProducerRecord<String, Stock> record = new ProducerRecord<>(inputTopic, key, stock);
-
-    producer.send(record, (recordMetadata, exception) -> {
-      if (exception != null) {
-        logger.error("Error during sending", exception);
-      }
-    });
-  }
-
-  private Map<String, StockStatus> readKeyStockStatusToMap() {
-    Map<String, StockStatus> keyStockStatusMap = new HashMap<>();
-    ConsumerRecords<String, StockStatus> records = consumer.poll(Duration.ofMillis(100));
-    records.forEach(record -> keyStockStatusMap.put(record.key(), record.value()));
-    return keyStockStatusMap;
   }
 }
