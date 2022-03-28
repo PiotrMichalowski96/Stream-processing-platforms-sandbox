@@ -11,7 +11,7 @@ public class CollectStockStatusSink implements SinkFunction<StockStatus> {
   public static final Map<String, StockStatus> stockStatusMap = Collections.synchronizedMap(new HashMap<>());
 
   @Override
-  public void invoke(StockStatus value, Context context) throws Exception {
+  public void invoke(StockStatus value, Context context) {
     String key = value.getRecentQuota().getTicker();
     stockStatusMap.put(key, value);
   }

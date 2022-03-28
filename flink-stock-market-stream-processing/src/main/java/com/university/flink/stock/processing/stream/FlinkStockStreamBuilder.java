@@ -12,7 +12,6 @@ import com.university.stock.market.trading.analysis.service.TradingAnalysisServi
 import com.university.stock.market.trading.analysis.service.TradingAnalysisServiceImpl;
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +23,7 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
+import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
@@ -46,8 +46,8 @@ public class FlinkStockStreamBuilder {
     return this;
   }
 
-  public FlinkStockStreamBuilder withElementSource(Collection<String> elements) {
-    this.inputStockStream = streamEnv.fromCollection(elements);
+  public FlinkStockStreamBuilder witSourceFunction(SourceFunction<String> sourceFunction) {
+    this.inputStockStream = streamEnv.addSource(sourceFunction);
     return this;
   }
 
