@@ -15,7 +15,7 @@ class MapperMethodsTest {
   void shouldCreateHashId() {
     //given
     String exampleText = RandomStringUtils.randomAlphabetic(50);
-    String expectedHashId = String.valueOf(exampleText.hashCode());
+    String expectedHashId = String.valueOf(Math.abs(exampleText.hashCode()));
 
     //when
     String actualHashId = mapperMethods.createHashId(exampleText);

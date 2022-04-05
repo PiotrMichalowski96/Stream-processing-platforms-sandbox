@@ -57,7 +57,7 @@ class KafkaMessageListenerTest {
         + "}";
 
     StockElasticMessage expectedElasticMessage = StockElasticMessage.builder()
-        .id("-865609043")
+        .id("865609043")
         .streamPlatform("KAFKA_STREAMS")
         .processingTimeInMillis(100L)
         .experimentCase("Unknown size of stream")

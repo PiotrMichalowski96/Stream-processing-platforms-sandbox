@@ -28,7 +28,7 @@ class ElasticMessageMapperTest {
         .build();
 
     String exampleJson = "{recentQuota: {}}";
-    String hashId = String.valueOf(exampleJson.hashCode());
+    String hashId = String.valueOf(Math.abs(exampleJson.hashCode()));
 
     StockElasticMessage expectedElasticMessage = StockElasticMessage.builder()
         .id(hashId)

@@ -12,7 +12,7 @@ public interface MapperMethods {
     if(StringUtils.isBlank(text)) {
       return RandomStringUtils.randomAlphanumeric(30);
     }
-    int hashCode = text.hashCode();
+    int hashCode = Math.abs(text.hashCode());
     return String.valueOf(hashCode);
   }
 }
