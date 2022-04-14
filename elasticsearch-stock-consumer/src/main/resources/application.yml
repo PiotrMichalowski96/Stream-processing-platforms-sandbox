@@ -9,6 +9,7 @@ consumer:
     enable: true
     bootstrapAddress: 127.0.0.1:9092
     topic: stock_status_test
+#    topic: temporary_topic #Topic for Flink because it can't have log compaction
     consumer:
       groupId: kafka-elasticsearch-consumer
 

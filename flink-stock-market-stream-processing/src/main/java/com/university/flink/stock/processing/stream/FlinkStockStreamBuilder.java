@@ -16,7 +16,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.connector.sink.Sink;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -38,11 +37,11 @@ public class FlinkStockStreamBuilder {
   private final StreamExecutionEnvironment streamEnv;
 
   private DataStreamSource<String> inputStockStream;
-  private Sink<StockStatus, ?, ?, ?> stockStatusSink;
+  private KafkaSink<StockStatus> stockStatusSink;
   private SinkFunction<StockStatus> stockStatusSinkFunction;
 
   public FlinkStockStreamBuilder withKafkaSource(KafkaSource<String> kafkaSource) {
-    this.inputStockStream = streamEnv.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), KAFKA_SOURCE_NAME);
+    this.inputStockStream = streamEnv.fromSource(kafkaSource, WatermarkStrategy.forMonotonousTimestamps(), KAFKA_SOURCE_NAME);
     return this;
   }
 
