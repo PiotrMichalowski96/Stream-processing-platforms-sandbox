@@ -1,6 +1,5 @@
 package com.university.elasticsearch.stock.consumer.mapper;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.university.elasticsearch.stock.consumer.model.StockElasticMessage;
@@ -40,7 +39,7 @@ class ElasticMessageMapperTest {
         .build();
 
     //when
-    StockElasticMessage actualElasticMessage = mapper.toStockElasticMessage(stockStatus, exampleJson);
+    StockElasticMessage actualElasticMessage = mapper.toMessage(stockStatus, exampleJson);
 
     //then
     assertThat(actualElasticMessage).usingRecursiveComparison()

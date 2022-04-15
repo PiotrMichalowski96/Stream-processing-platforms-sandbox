@@ -1,4 +1,4 @@
-package com.university.elasticsearch.stock.consumer.kinesis;
+package com.university.stock.market.consumer.kinesis;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

@@ -32,7 +32,7 @@ consumer:
 ############################################################
 elasticsearch:
   port: 443
-  hostname: stream-processing-pl-2734991925.us-east-1.bonsaisearch.net
+  hostname: master-thesis-5198556184.us-east-1.bonsaisearch.net
   username: ${bonsai.username}
   password: ${bonsai.password}
   index: streaming-platform
@@ -42,4 +42,4 @@ elasticsearch:
 ############################################################
 logging:
   level:
-    com.university.elasticsearch.stock.consumer: debug
+    com.university.stock.market.consumer: debug

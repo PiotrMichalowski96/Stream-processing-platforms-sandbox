@@ -8,6 +8,7 @@
     <module>stock-market-java-model</module>
     <module>stock-market-common</module>
     <module>trading-analysis</module>
+    <module>stock-market-consumer</module>
   </modules>
 
   <groupId>com.university</groupId>
