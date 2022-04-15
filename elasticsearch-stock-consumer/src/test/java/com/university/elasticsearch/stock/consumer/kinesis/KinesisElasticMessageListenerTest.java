@@ -31,7 +31,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class KinesisMessageListenerTest {
+class KinesisElasticMessageListenerTest {
 
   @Mock
   private ElasticProducer elasticProducer;

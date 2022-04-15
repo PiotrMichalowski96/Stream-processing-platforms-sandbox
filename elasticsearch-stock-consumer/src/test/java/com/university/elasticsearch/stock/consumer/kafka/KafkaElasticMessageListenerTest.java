@@ -18,7 +18,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class KafkaMessageListenerTest {
+class KafkaElasticMessageListenerTest {
 
   @InjectMocks
   private KafkaMessageListener<StockElasticMessage> kafkaMessageListener;
@@ -28,7 +28,6 @@ class KafkaMessageListenerTest {
   private ElasticMessageMapper elasticMessageMapper = new ElasticMessageMapperImpl();
   @Captor
   private ArgumentCaptor<StockElasticMessage> messageCaptor;
-
 
   @Test
   void shouldSendStockElasticMessageToKibana() {
