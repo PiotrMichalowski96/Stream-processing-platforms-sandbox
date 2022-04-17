@@ -1,0 +1,46 @@
+server:
+  port: 8084
+
+consumer:
+  ############################################################
+  # Kafka properties
+  ############################################################
+  kafka:
+    enable: true
+    bootstrapAddress: 127.0.0.1:9092
+    topic: kafka-topic
+    consumer:
+      groupId: kafka-elasticsearch-consumer
+
+  ############################################################
+  # AWS Kinesis properties
+  ############################################################
+  kinesis:
+    enable: false
+    schedule: 5000 #5 sec
+    aws:
+      region: us-east-1
+      stream: stock_status_test
+      access:
+        key: key
+      secret:
+        key: secret
+
+############################################################
+# MongoDB configuration
+############################################################
+spring:
+  mongodb:
+    embedded:
+      version: 3.5.5
+  data:
+    mongodb:
+      port: 0
+      host: localhost
+
+############################################################
+# Logging level
+############################################################
+logging:
+  level:
+    com.university.mongo.stock.consumer.service: debug

@@ -1,0 +1,47 @@
+server:
+  port: 8084
+
+consumer:
+  ############################################################
+  # Kafka properties
+  ############################################################
+  kafka:
+    enable: false
+    bootstrapAddress: 127.0.0.1:9092
+    topic: stock_status_test
+#    topic: temporary_topic #Topic for Flink because it can't have log compaction
+    consumer:
+      groupId: kafka-elasticsearch-consumer
+
+  ############################################################
+  # AWS Kinesis properties
+  ############################################################
+  kinesis:
+    enable: false
+    schedule: 5000 #5 sec
+    aws:
+      region: us-east-1
+      stream: stock_status_test
+      access:
+        key: ${aws.access.key} #Here add your AWS access key
+      secret:
+        key: ${aws.secret.key} #Here add your AWS secret key
+
+############################################################
+# MongoDB configuration
+############################################################
+spring:
+  mongodb:
+    embedded:
+      version: 3.5.5
+  data:
+    mongodb:
+      port: 0
+      host: localhost
+
+############################################################
+# Logging level
+############################################################
+logging:
+  level:
+    com.university.mongo.stock.consumer.service: debug
