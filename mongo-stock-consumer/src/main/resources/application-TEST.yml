@@ -10,7 +10,7 @@ consumer:
     bootstrapAddress: 127.0.0.1:9092
     topic: kafka-topic
     consumer:
-      groupId: kafka-elasticsearch-consumer
+      groupId: kafka-mongo-consumer
 
   ############################################################
   # AWS Kinesis properties

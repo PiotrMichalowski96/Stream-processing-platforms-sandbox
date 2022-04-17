@@ -6,12 +6,12 @@ consumer:
   # Kafka properties
   ############################################################
   kafka:
-    enable: false
+    enable: true
     bootstrapAddress: 127.0.0.1:9092
     topic: stock_status_test
 #    topic: temporary_topic #Topic for Flink because it can't have log compaction
     consumer:
-      groupId: kafka-elasticsearch-consumer
+      groupId: kafka-mongo-consumer
 
   ############################################################
   # AWS Kinesis properties
@@ -31,12 +31,9 @@ consumer:
 # MongoDB configuration
 ############################################################
 spring:
-  mongodb:
-    embedded:
-      version: 3.5.5
   data:
     mongodb:
-      port: 0
+      port: 27017
       host: localhost
 
 ############################################################
