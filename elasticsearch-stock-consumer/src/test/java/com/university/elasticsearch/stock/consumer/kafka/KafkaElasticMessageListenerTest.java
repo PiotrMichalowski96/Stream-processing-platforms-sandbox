@@ -7,6 +7,7 @@ import com.university.elasticsearch.stock.consumer.mapper.ElasticMessageMapper;
 import com.university.elasticsearch.stock.consumer.mapper.ElasticMessageMapperImpl;
 import com.university.elasticsearch.stock.consumer.model.StockElasticMessage;
 import com.university.elasticsearch.stock.consumer.service.ElasticProducer;
+import com.university.stock.market.consumer.kafka.KafkaMessageListener;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,17 +18,16 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class KafkaMessageListenerTest {
+class KafkaElasticMessageListenerTest {
 
   @InjectMocks
-  private KafkaMessageListener kafkaMessageListener;
+  private KafkaMessageListener<StockElasticMessage> kafkaMessageListener;
   @Mock
   private ElasticProducer elasticProducer;
   @Spy
   private ElasticMessageMapper elasticMessageMapper = new ElasticMessageMapperImpl();
   @Captor
   private ArgumentCaptor<StockElasticMessage> messageCaptor;
-
 
   @Test
   void shouldSendStockElasticMessageToKibana() {

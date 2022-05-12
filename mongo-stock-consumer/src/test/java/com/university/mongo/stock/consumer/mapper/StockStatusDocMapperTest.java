@@ -1,8 +1,8 @@
-package com.university.elasticsearch.stock.consumer.mapper;
+package com.university.mongo.stock.consumer.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.university.elasticsearch.stock.consumer.model.StockElasticMessage;
+import com.university.mongo.stock.consumer.entity.StockStatusDoc;
 import com.university.stock.market.model.domain.InputMetadataDetails;
 import com.university.stock.market.model.domain.ResultMetadataDetails;
 import com.university.stock.market.model.domain.ResultMetadataDetails.StreamProcessing;
@@ -10,12 +10,12 @@ import com.university.stock.market.model.domain.Stock;
 import com.university.stock.market.model.domain.StockStatus;
 import org.junit.jupiter.api.Test;
 
-class ElasticMessageMapperTest {
+class StockStatusDocMapperTest {
 
-  private final ElasticMessageMapper mapper = new ElasticMessageMapperImpl();
+  private final StockStatusDocMapper mapper = new StockStatusDocMapperImpl();
 
   @Test
-  void shouldMapStockStatusToElasticMessage() {
+  void shouldMapStockStatusToDocument() {
     //given
     Stock stock = Stock.builder()
         .inputMetadataDetails(new InputMetadataDetails("experiment case", "description"))
@@ -27,10 +27,8 @@ class ElasticMessageMapperTest {
         .build();
 
     String exampleJson = "{recentQuota: {}}";
-    String hashId = String.valueOf(Math.abs(exampleJson.hashCode()));
 
-    StockElasticMessage expectedElasticMessage = StockElasticMessage.builder()
-        .id(hashId)
+    StockStatusDoc expectedStockStatusDoc = StockStatusDoc.builder()
         .streamPlatform("KAFKA_STREAMS")
         .processingTimeInMillis(100L)
         .experimentCase("experiment case")
@@ -39,11 +37,11 @@ class ElasticMessageMapperTest {
         .build();
 
     //when
-    StockElasticMessage actualElasticMessage = mapper.toMessage(stockStatus, exampleJson);
+    StockStatusDoc actualStockStatusDoc = mapper.toMessage(stockStatus, exampleJson);
 
     //then
-    assertThat(actualElasticMessage).usingRecursiveComparison()
+    assertThat(actualStockStatusDoc).usingRecursiveComparison()
         .ignoringFields("timestamp")
-        .isEqualTo(expectedElasticMessage);
+        .isEqualTo(expectedStockStatusDoc);
   }
 }

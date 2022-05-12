@@ -29,7 +29,7 @@ producer:
 ############################################################
 twelvedata:
   webservice:
-    enable: true
+    enable: false
     properties:
       keyPassword: ${api.key} #Here add your api secret key
       url: wss://ws.twelvedata.com/v1/quotes/price
@@ -41,8 +41,8 @@ twelvedata:
 stock:
   market:
     unique:
-      quotes: 30
-    schedule: "500"
+      quotes: 6000
+    schedule: "100"
 
 ############################################################
 # Master Thesis experiment case properties
@@ -50,8 +50,8 @@ stock:
 master:
   thesis:
     experiment:
-      case: "Unknown size of stream"
-      description: "Real random stream of data from online API"
+      case: "Przypadek pomiarowy nr 10 [18000 KB/s]"
+      description: "Apache Kafka Broker"
 
 ############################################################
 # Logging level

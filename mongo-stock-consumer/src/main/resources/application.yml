@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8084
 
 consumer:
   ############################################################
@@ -11,7 +11,7 @@ consumer:
     topic: stock_status_test
 #    topic: temporary_topic #Topic for Flink because it can't have log compaction
     consumer:
-      groupId: kafka-elasticsearch-consumer
+      groupId: kafka-mongo-consumer
 
   ############################################################
   # AWS Kinesis properties
@@ -28,18 +28,17 @@ consumer:
         key: ${aws.secret.key} #Here add your AWS secret key
 
 ############################################################
-# Elasticsearch properties
+# MongoDB configuration
 ############################################################
-elasticsearch:
-  port: 443
-  hostname: master-thesis-5198556184.us-east-1.bonsaisearch.net
-  username: ${bonsai.username}
-  password: ${bonsai.password}
-  index: streaming-platform
+spring:
+  data:
+    mongodb:
+      port: 27017
+      host: localhost
 
 ############################################################
 # Logging level
 ############################################################
 logging:
   level:
-    com.university.stock.market.consumer: debug
+    com.university.mongo.stock.consumer.service: debug

@@ -1,4 +1,4 @@
-package com.university.elasticsearch.stock.consumer.kafka;
+package com.university.stock.market.consumer.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
